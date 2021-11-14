@@ -1,0 +1,7 @@
+{
+  "name": "pnsq",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}

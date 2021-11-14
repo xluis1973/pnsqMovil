@@ -1,0 +1,97 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    
+  </ion-toolbar>
+</ion-header>
+
+<ion-content >
+
+  <ion-row class="top-20" >
+    <ion-col size="12" class="ion-text-center">
+              <img src="/assets/logo.png" class="img-logo">
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col size="12" class="ion-text-center">
+      <ion-text >
+        <h3>Parque Naional Sierra de Las Quijadas</h3>
+      </ion-text>
+      <ion-text class="ion-text-center" color="primary">
+        <h4>Guía de Turismo</h4>
+      </ion-text>
+              
+      
+    </ion-col>
+  </ion-row>
+
+      <form (ngSubmit)="login(flogin)" #flogin="ngForm">
+        <ion-grid fixed>
+     
+          <ion-row class="top-20">
+            <ion-col>
+              
+                <ion-list>
+                  
+                  <ion-item>
+                    <ion-label>Email</ion-label>
+                    <ion-input name="email"
+                                type="email"
+                                [(ngModel)]="loginUser.email"
+                                required></ion-input>
+                  </ion-item>
+
+                  <ion-item>
+                    <ion-label>Password</ion-label>
+                    <ion-input name="password"
+                                type="password"
+                                [(ngModel)]="loginUser.password"
+                                required></ion-input>
+                  </ion-item>
+
+                </ion-list>
+            </ion-col>
+          </ion-row>
+
+          <ion-row class="top-20">
+            <ion-col >
+              <ion-button type="submit"
+                          color="tertiary"
+                          shape="round"
+                          expand="block"
+                          color="primary">
+                Login
+              </ion-button>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="12">
+              <ion-text  class="ion-text-center"   color="primary">
+                <h4>Visitantes</h4>
+              </ion-text>
+            </ion-col>
+          </ion-row>
+          <ion-row class="top-20">
+            <ion-col >
+              <ion-button type="button" (click)="loginGoogle()"
+                          color="tertiary"
+                          shape="round"
+                          expand="block"
+                          color="primary">
+                Google
+              </ion-button>
+            </ion-col>
+          </ion-row>
+
+
+        </ion-grid>
+      </form>
+    
+
+
+
+</ion-content>
+
+
+<ion-footer no-border>
+ 
+</ion-footer>

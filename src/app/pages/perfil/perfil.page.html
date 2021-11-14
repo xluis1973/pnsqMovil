@@ -1,0 +1,88 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Mi Perfil</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+        
+               
+  <form (ngSubmit)="confirmar(flogin)" #flogin="ngForm">
+      <ion-row class="top-20">
+        <ion-col>
+          
+            <ion-list>
+              
+              <ion-item>
+                <ion-label>Apellido</ion-label>
+                <ion-input name="apellido"
+                 readonly [(ngModel)]="usuario.apellido"
+                           ></ion-input>
+              </ion-item>
+
+              <ion-item>
+                <ion-label>Nombre</ion-label>
+                <ion-input name="nombre"
+                           type="text"
+                           required [(ngModel)]="usuario.nombre"></ion-input>
+              </ion-item>
+
+              <ion-item>
+                  <ion-label>Domicilio</ion-label>
+                  <ion-input name="domicilio"
+                             type="text"
+                             required [(ngModel)]="usuario.domicilio"></ion-input>
+                </ion-item>
+
+                <ion-item>
+                  <ion-label>Teléfono</ion-label>
+                  <ion-input name="telefono"
+                             type="text"
+                             required [(ngModel)]="usuario.telefono"></ion-input>
+                </ion-item>
+
+                <ion-item>
+                  <ion-label>Pais</ion-label>
+                  <ion-input name="pais"
+                             type="text"
+                             required [(ngModel)]="visitante.pais"></ion-input>
+                </ion-item>
+
+                <ion-item>
+                  <ion-label>Provincia</ion-label>
+                  <ion-input name="provincia"
+                             type="text"
+                             required [(ngModel)]="visitante.provincia"></ion-input>
+                </ion-item>
+
+
+            </ion-list>
+        </ion-col>
+      </ion-row>
+   <ion-row class="top-20">
+     <ion-col size="12">
+       <ion-text color="primary">
+         <h1></h1>
+       </ion-text>
+     </ion-col>
+   </ion-row>
+   <ion-row class="top-20">
+     <ion-col size="12"><br></ion-col>
+   </ion-row>
+   <ion-row class="top-20">
+     <ion-col size="12"><br></ion-col>
+   </ion-row>
+      <ion-row class="top-20">
+        <ion-col class="ion-text-right">
+          <ion-button type="submit"
+                      color="tertiary"
+                      shape="round">
+          Confirmar
+        </ion-button>
+      </ion-col>
+    </ion-row>
+    
+  </form>
+
+
+</ion-content>
