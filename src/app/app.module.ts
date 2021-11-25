@@ -11,6 +11,7 @@ import { AngularFireModule } from "@angular/fire/compat";
 import { AngularFireAuthModule } from "@angular/fire/compat/auth";
 import { AngularFirestoreModule } from "@angular/fire/compat/firestore";
 import { GooglePlus } from '@ionic-native/google-plus/ngx';
+import { Geolocation } from '@ionic-native/geolocation/ngx';
 
 @NgModule({
   declarations: [AppComponent],
@@ -18,7 +19,7 @@ import { GooglePlus } from '@ionic-native/google-plus/ngx';
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule,AngularFireModule.initializeApp(firebaseConfig),
     AngularFireAuthModule,],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    AngularFirestoreModule, GooglePlus],
+    AngularFirestoreModule, GooglePlus, Geolocation],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
