@@ -79,5 +79,6 @@ export interface Marker{
         lng: number,
     
     };
-    title: string
+    title: string,
+    label: string
 }

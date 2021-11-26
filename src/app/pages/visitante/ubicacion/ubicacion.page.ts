@@ -12,6 +12,7 @@ declare var google:any;
 export class UbicacionPage implements AfterViewInit {
   private lastPosition:Geoposition;
   private lectura:boolean=false;
+  private icono="/assets/icon/marcador.png"
 
   map:any;
   @ViewChild('map',{read: ElementRef, static: false}) mapRef:ElementRef;
@@ -23,7 +24,8 @@ markers: Marker[]=[
       lat: -32.495849,
       lng: -67.005093
     },
-    title: 'visitante 1'
+    title: 'visitante 1',
+    label: 'Esta es la etiqueta'
   }
 
  
@@ -45,7 +47,7 @@ constructor(private geolocation: Geolocation) {}
  
 
   
-
+// Generación de mapa 
   async loadMap(){
     const mapEle:HTMLElement = document.getElementById('map');
     const myLatLng=new google.maps.LatLng(-33.1726642,-66.3098262);
@@ -93,25 +95,11 @@ constructor(private geolocation: Geolocation) {}
           lat:geopo.coords.latitude,
           lng: geopo.coords.longitude
         },
-        title: 'Yo soy este'
+        title: 'Yo soy este',
+        label: 'Esta es la etiqueta'
       }
     );
-    this.geolocation.getCurrentPosition().then((resp) => {
-      // resp.coords.latitude
-      // resp.coords.longitude
-      console.log("latitud ",resp.coords.latitude);
-      this.markers.push(
-        {
-          position: {
-            lat: resp.coords.latitude,
-            lng: resp.coords.longitude
-          },
-          title: 'Yo soy este'
-        }
-      );
-     }).catch((error) => {
-       console.log('Error getting location', error);
-     });
+   
     
      let watch = this.geolocation.watchPosition({
       maximumAge: 3000,
@@ -125,13 +113,42 @@ constructor(private geolocation: Geolocation) {}
         this.lastPosition=(data as Geoposition);
         console.log("latitud dentro",(data as Geoposition).coords.latitude);
           console.log("longitud dentro",(data as Geoposition).coords.longitude);
+          this.marcador= new google.maps.Marker({
+            position: new google.maps.LatLng((data as Geoposition).coords.latitude,(data as Geoposition).coords.longitude),
+            draggable: true,
+                  map: this.map,
+                  title: "Título",
+                  animation: google.maps.Animation.DROP,
+            
+            icon: "/assets/icon/marcador.png",
+            label: {
+              color: 'blue',
+              fontWeight: 'bold',
+              text: 'yo',
+            },
+          });
       }else{
+        this.marcador=null;
         let diferenciaLatitud=Math.abs(this.lastPosition.coords.latitude-(data as Geoposition).coords.latitude);
         let diferenciaLongitud=Math.abs(this.lastPosition.coords.longitude-(data as Geoposition).coords.longitude);
         if(diferenciaLongitud>10 || diferenciaLatitud>10){
           this.lastPosition=(data as Geoposition);
           console.log("Cambio",(data as Geoposition).coords.latitude);
           console.log("Cambio",(data as Geoposition).coords.longitude);
+          this.marcador= new google.maps.Marker({
+            position: new google.maps.LatLng((data as Geoposition).coords.latitude,(data as Geoposition).coords.longitude),
+            draggable: true,
+                  map: this.map,
+                  animation: google.maps.Animation.DROP,
+            title: "Yo",
+            icon: "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png",
+            label: {
+              color: 'blue',
+              fontWeight: 'bold',
+              text: 'Hello world',
+            },
+          });
+          
      /* this.addMarker({
         position: {
           lat: (data as Geoposition).coords.latitude,
@@ -188,5 +205,26 @@ constructor(private geolocation: Geolocation) {}
 
     }
    
+    posicionActual(){
+
+      this.geolocation.getCurrentPosition().then((resp) => {
+        // resp.coords.latitude
+        // resp.coords.longitude
+        console.log("latitud ",resp.coords.latitude);
+        this.markers.push(
+          {
+            position: {
+              lat: resp.coords.latitude,
+              lng: resp.coords.longitude
+            },
+            title: 'Yo soy este',
+            label: 'Esta es la etiqueta'
+          }
+        );
+       }).catch((error) => {
+         console.log('Error getting location', error);
+       });
+
+    }
 
 }
