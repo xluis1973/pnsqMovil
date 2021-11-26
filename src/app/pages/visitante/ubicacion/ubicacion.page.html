@@ -2,11 +2,17 @@
   <ion-toolbar>
     
     <ion-title >Mi Ubicación</ion-title>
+    <ion-buttons slot="start">
+      <ion-button (click)="onClick()" expand="block" fill="clear" shape="round">
+        Click me
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
 
         <div #map id="map" ></div>
+        
   
 </ion-content>

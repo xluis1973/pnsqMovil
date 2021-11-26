@@ -29,7 +29,8 @@ markers: Marker[]=[
  
 ];
 
-
+hecho:boolean=false;
+private marcador=null;
 
 constructor(private geolocation: Geolocation) {}
   ngAfterViewInit(): void {
@@ -47,7 +48,7 @@ constructor(private geolocation: Geolocation) {}
 
   async loadMap(){
     const mapEle:HTMLElement = document.getElementById('map');
-    const myLatLng=new google.maps.LatLng(-32.495849,-67.005093);
+    const myLatLng=new google.maps.LatLng(-33.1726642,-66.3098262);
     const options={
       center: myLatLng,
       zoom: 15,
@@ -70,7 +71,7 @@ constructor(private geolocation: Geolocation) {}
 
     ctaLayer.setMap(this.map);
     setTimeout(() => {
-      this.map.setCenter(new google.maps.LatLng(-32.495849, -67.005093));
+      this.map.setCenter(new google.maps.LatLng(-33.1726642,-66.3098262));
       this.map.setZoom(15);
       
 }, 3000);
@@ -122,19 +123,22 @@ constructor(private geolocation: Geolocation) {}
       // data.coords.longitude
       if(!this.lectura){
         this.lastPosition=(data as Geoposition);
+        console.log("latitud dentro",(data as Geoposition).coords.latitude);
+          console.log("longitud dentro",(data as Geoposition).coords.longitude);
       }else{
         let diferenciaLatitud=Math.abs(this.lastPosition.coords.latitude-(data as Geoposition).coords.latitude);
         let diferenciaLongitud=Math.abs(this.lastPosition.coords.longitude-(data as Geoposition).coords.longitude);
-        if(diferenciaLongitud>100 || diferenciaLatitud>100){
+        if(diferenciaLongitud>10 || diferenciaLatitud>10){
           this.lastPosition=(data as Geoposition);
           console.log("Cambio",(data as Geoposition).coords.latitude);
-      this.addMarker({
+          console.log("Cambio",(data as Geoposition).coords.longitude);
+     /* this.addMarker({
         position: {
           lat: (data as Geoposition).coords.latitude,
           lng:(data as Geoposition).coords.longitude
         },
         title: 'Yo soy este'
-      });
+      });*/
         }
 
         
@@ -142,15 +146,16 @@ constructor(private geolocation: Geolocation) {}
       
       
      });
-    this.markers.forEach(marker=>{
+   /* this.markers.forEach(marker=>{
     
       
       this.addMarker(marker);
       
-    });
+    });*/
   }
 //agregar marcador
   addMarker(marker:Marker){
+    
     return new google.maps.Marker({
       position: marker.position,
       map: this.map,
@@ -159,5 +164,29 @@ constructor(private geolocation: Geolocation) {}
   
   }
   
+  onClick(){
+    
+    
+    
+  
+    if(!this.hecho){
+      this.marcador= new google.maps.Marker({
+        position: new google.maps.LatLng(-33.1726642,-66.3098262),
+        draggable: true,
+              map: this.map,
+              animation: google.maps.Animation.DROP,
+        title: 'Yo'
+      });
+      
+      this.hecho=true;
+    }else {
+      this.marcador.setMap(null);
+      this.marcador=null;
+      this.hecho=false;
+      console.log("Borrando");
+    }
+
+    }
+   
 
 }
