@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Usuario, Visitante } from 'src/app/interfaces/interfaces';
 import { NavController } from '@ionic/angular';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-perfil',
@@ -26,10 +27,20 @@ export class PerfilPage implements OnInit {
 
 
   };
-  constructor(private navCtrl:NavController) { }
+  constructor(private navCtrl:NavController, private activatedRoute:ActivatedRoute) { }
 
   ngOnInit() 
 {
+  this.activatedRoute.queryParams.subscribe(
+    param=>{
+      this.usuario.identificador=param.identificador;
+      this.usuario.apellido=param.apellido;
+      this.usuario.nombre=param.nombre;
+     
+    }
+  );
+
+
   }
 confirmar(formulario){
   this.navCtrl.navigateRoot("/visitante",{animated:true});

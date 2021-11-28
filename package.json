@@ -26,6 +26,7 @@
     "@ionic/angular": "^5.5.2",
     "cordova": "^10.0.0",
     "cordova-android": "9.1.0",
+    "cordova-plugin-googleplus": "8.5.2",
     "firebase": "^9.0.2",
     "g": "^2.0.1",
     "rxjs": "~6.6.0",
@@ -51,7 +52,6 @@
     "@typescript-eslint/parser": "4.16.1",
     "cordova-plugin-device": "^2.0.2",
     "cordova-plugin-geolocation": "^4.1.0",
-    "cordova-plugin-googleplus": "^8.5.2",
     "cordova-plugin-ionic-keyboard": "^2.2.0",
     "cordova-plugin-ionic-webview": "^4.2.1",
     "cordova-plugin-splashscreen": "^5.0.2",
@@ -76,10 +76,6 @@
   "description": "An Ionic project",
   "cordova": {
     "plugins": {
-      "cordova-plugin-googleplus": {
-        "REVERSED_CLIENT_ID": "com.googleusercontent.apps.449724327328-fvpqlrpd5i18er14budhnrm9u51mlvc6",
-        "WEB_APPLICATION_CLIENT_ID": "449724327328-qp977ho2tah8j634s7g2q2obppfgp6oi.apps.googleusercontent.com"
-      },
       "cordova-plugin-whitelist": {},
       "cordova-plugin-statusbar": {},
       "cordova-plugin-device": {},
@@ -90,6 +86,10 @@
       "cordova-plugin-ionic-keyboard": {},
       "cordova-plugin-geolocation": {
         "GPS_REQUIRED": "true"
+      },
+      "cordova-plugin-googleplus": {
+        "REVERSED_CLIENT_ID": "449724327328-km2r447tgaj4lv4mkehf295smeqdoitt.apps.googleusercontent.com",
+        "PLAY_SERVICES_VERSION": "15.0.1"
       }
     },
     "platforms": [

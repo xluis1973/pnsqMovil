@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { NavigationExtras, Router } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import { AlertasService } from 'src/app/services/alertas.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
@@ -13,6 +14,7 @@ import { AutorizaService } from '../../services/autoriza.service';
 export class LoginPage implements OnInit {
 
   private res:boolean;
+
  
 
   loginUser={
@@ -20,7 +22,8 @@ export class LoginPage implements OnInit {
     password:'123456'
   };
   constructor(private  navCrl:NavController,private userServ:UsuarioService,
-     private alertasService:AlertasService, private athSrv:AutorizaService) { }
+     private alertasService:AlertasService, private athSrv:AutorizaService,
+     private route:Router) { }
 
   ngOnInit() {
   }
@@ -33,6 +36,7 @@ export class LoginPage implements OnInit {
        if(this.res){
 
                 this.navCrl.navigateRoot('/guia',{animated:true});
+                
 
        }else {
          this.alertasService.presentAlert("Usuario y/contraseña incorrecta");
@@ -48,7 +52,22 @@ export class LoginPage implements OnInit {
   loginGoogle(){
        this.athSrv.loginConGoogle().then(resp=>{
 
-         this.navCrl.navigateRoot('/perfil',{animated:true});
+
+        console.log("lectura ",resp);
+        const navigationExtras:NavigationExtras={
+          queryParams: {
+            identificador: resp.userId,
+            apellido: resp.familyName,
+            nombre: resp.givenName
+          }
+        };
+         //this.navCrl.navigateRoot('/perfil',{animated:true});
+        
+         this.route.navigate(['perfil'],navigationExtras);
+         
+         
+         
+         
        });
   }
 
