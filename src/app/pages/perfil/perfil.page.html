@@ -35,6 +35,13 @@
                 </ion-item>
 
                 <ion-item>
+                  <ion-label>Ciudad</ion-label>
+                  <ion-input name="ciudad"
+                             type="text"
+                             required [(ngModel)]="usuario.ciudad"></ion-input>
+                </ion-item>
+
+                <ion-item>
                   <ion-label>Teléfono</ion-label>
                   <ion-input name="telefono"
                              type="text"
@@ -76,7 +83,9 @@
         <ion-col class="ion-text-right">
           <ion-button type="submit"
                       color="tertiary"
-                      shape="round">
+                      shape="round"
+                      [disabled]="botonDesactivado"
+                      >
           Confirmar
         </ion-button>
       </ion-col>
