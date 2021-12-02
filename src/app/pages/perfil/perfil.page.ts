@@ -37,6 +37,7 @@ export class PerfilPage implements OnInit, AfterViewInit {
 
   async ngOnInit() 
 {
+  
   this.activatedRoute.queryParams.subscribe(
     param=>{
       this.usuario.identificador=param.identificador;
@@ -51,6 +52,7 @@ export class PerfilPage implements OnInit, AfterViewInit {
   await this.autorizaService.obtenerUsuario(this.usuario, this.visitante);
 
   this.botonDesactivado=false;
+ 
 
   }
   
