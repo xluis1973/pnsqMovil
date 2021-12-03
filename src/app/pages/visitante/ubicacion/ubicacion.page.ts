@@ -115,7 +115,12 @@ export class UbicacionPage  {
         
         let diferenciaLatitud=Math.abs(this.lastPosition.coords.latitude-(data as Geoposition).coords.latitude);
         let diferenciaLongitud=Math.abs(this.lastPosition.coords.longitude-(data as Geoposition).coords.longitude);
-        if(diferenciaLongitud>10 || diferenciaLatitud>10){
+       
+        console.log("Diferencia Lat",diferenciaLatitud);
+        console.log("Diferencia Long",diferenciaLongitud);
+        const distancia= this.calcularDistancia(this.lastPosition,(data as Geoposition));
+        console.log("distancia ",distancia);
+        if(distancia>1){
            this.limpiaMarcadores();
           this.lastPosition=(data as Geoposition);
           console.log("Cambio",(data as Geoposition).coords.latitude);
@@ -201,5 +206,37 @@ export class UbicacionPage  {
     }
     
 
+
+    //Fórmula de Haversine 
+    /*dlon = lon2 - lon1
+      dlat = lat2 - lat1
+      a = sin^2(dlat/2) + cos(lat1) * cos(lat2) * sin^2(dlon/2)
+      c = 2 * arcsin(min(1,sqrt(a)))
+      d = R * c*/
+    calcularDistancia(posOrigen:Geoposition,posDestino:Geoposition):number{
+
+      const radioDeLaTierra=6378.0;
+      const difLatitud:number = (posDestino.coords.latitude - posOrigen.coords.latitude);
+      const difLongitud = (posDestino.coords.longitude -posOrigen.coords.longitude);
+
+
+      const a = this.AlCuadrado(Math.sin(difLatitud/2)) +
+          Math.cos(this.EnRadianes(posOrigen.coords.latitude))*
+          Math.cos(this.EnRadianes(posDestino.coords.latitude))*
+          this.AlCuadrado(Math.sin(difLongitud/2));
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+      return radioDeLaTierra*c;
+    }
+
+
+     AlCuadrado(valor:number):number
+{
+  return Math.pow(valor, 2);
+}
+
+EnRadianes(valor:number):number
+{
+  return (Math.PI / 180) * valor;
+}
 }
 

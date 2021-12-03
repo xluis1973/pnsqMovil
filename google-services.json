@@ -1,0 +1,63 @@
+{
+  "project_info": {
+    "project_number": "449724327328",
+    "firebase_url": "https://pnsq-1cd2f-default-rtdb.firebaseio.com",
+    "project_id": "pnsq-1cd2f",
+    "storage_bucket": "pnsq-1cd2f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:449724327328:android:adfb5a8598c6cd707830c5",
+        "android_client_info": {
+          "package_name": "com.ulp.pnsq"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "449724327328-183tukb4fh9a1sflprm6d7377ki2it1r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ulp.pnsq",
+            "certificate_hash": "3da3cba95be66654a73947d65498ee1643ae5985"
+          }
+        },
+        {
+          "client_id": "449724327328-km2r447tgaj4lv4mkehf295smeqdoitt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ulp.pnsq",
+            "certificate_hash": "ac2e1940dbbf5e91fdea131614cf237dd33bd7ad"
+          }
+        },
+        {
+          "client_id": "449724327328-qp977ho2tah8j634s7g2q2obppfgp6oi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDXPOmJXUD74OEktm7S7j8tWSyeWrSe8Y4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "449724327328-qp977ho2tah8j634s7g2q2obppfgp6oi.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "449724327328-fvpqlrpd5i18er14budhnrm9u51mlvc6.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.ulp.pnsq"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

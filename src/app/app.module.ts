@@ -13,6 +13,7 @@ import { AngularFirestoreModule } from "@angular/fire/compat/firestore";
 import { GooglePlus } from '@ionic-native/google-plus/ngx';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 
+
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
