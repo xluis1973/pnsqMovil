@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { PublicarService } from 'src/app/services/publicar.service';
 
 @Component({
   selector: 'app-publicaciones',
@@ -7,9 +8,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PublicacionesPage implements OnInit {
 
-  constructor() { }
+  constructor(private publicarSrv:PublicarService) { }
 
   ngOnInit() {
+    this.publicarSrv.notificacionesPush();
   }
 
+  onClick(){}
 }

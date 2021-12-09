@@ -19,6 +19,8 @@ export class MensajesPage implements OnInit {
    
   }
 
+  auxilio(){} 
+  policia(){}
   incendio(){
     
     const mensaje:Mensaje={
