@@ -5,9 +5,10 @@ import { ToastController } from '@ionic/angular';
 import { getAuth  } from "firebase/auth";
 import { initializeApp } from 'firebase/app';
 import { firebaseConfig } from 'src/environments/environment.prod';
-import { getFirestore, getDocs, collection,setDoc,doc, query, where, getDoc } from 'firebase/firestore/lite';
+import { getFirestore, getDocs, collection,setDoc,doc, query, where } from 'firebase/firestore/lite';
 
-import { Usuario, Visitante } from '../interfaces/interfaces';
+
+import {  Usuario, Visitante } from '../interfaces/interfaces';
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth();
@@ -55,18 +56,20 @@ export class AutorizaService {
       //console.log('Error al guardar Visitante ',error.message);
   
     });
-  
+ 
     
 }
 
 async obtenerUsuario(usuario:Usuario,visitante:Visitante){
   //Obteniendo Usario
+  
   const usuarioCol = collection(db, 'usuario');
 
   const q = query(usuarioCol, where("identificador", "==", usuario.identificador));
   const usuarioSnapshot = await getDocs(q);
   
   const usuarioList = usuarioSnapshot.docs.map(doc => doc.data());
+  
   usuarioList.forEach((user)=>{
     usuario.identificador=user.identificador;
     usuario.activo=user.activo;
@@ -86,6 +89,7 @@ async obtenerUsuario(usuario:Usuario,visitante:Visitante){
   const qVisitante = query(visitanteCol, where("identificador", "==", usuario.identificador));
   const visitanteSnapshot = await getDocs(qVisitante);
   
+  
   const visitanteList = visitanteSnapshot.docs.map(doc => doc.data());
   visitanteList.forEach((user)=>{
     visitante.identificador=user.identificador;
@@ -93,9 +97,12 @@ async obtenerUsuario(usuario:Usuario,visitante:Visitante){
     visitante.provincia=user.provincia;
     visitante.usuario=user.usuario;
     //console.log("visitante ",user);
-    
+  
   
   });
 
+  
 }
 }
+
+

@@ -3,6 +3,7 @@ import { Usuario, Visitante } from 'src/app/interfaces/interfaces';
 import { NavController } from '@ionic/angular';
 import { ActivatedRoute } from '@angular/router';
 import { AutorizaService } from 'src/app/services/autoriza.service';
+import { PublicarService } from 'src/app/services/publicar.service';
 
 @Component({
   selector: 'app-perfil',
@@ -30,9 +31,10 @@ export class PerfilPage implements OnInit, AfterViewInit {
 
   };
   constructor(private navCtrl:NavController, private activatedRoute:ActivatedRoute, 
-    private autorizaService:AutorizaService) { }
+    private autorizaService:AutorizaService, private publicarSrv:PublicarService) { }
   ngAfterViewInit(): void {
     //this.autorizaService.obtenerUsuario(this.usuario, this.visitante);
+    this.publicarSrv.notificacionesPush();
   }
 
   async ngOnInit() 
@@ -52,6 +54,7 @@ export class PerfilPage implements OnInit, AfterViewInit {
   await this.autorizaService.obtenerUsuario(this.usuario, this.visitante);
 
   this.botonDesactivado=false;
+ 
  
 
   }

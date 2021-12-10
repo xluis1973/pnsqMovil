@@ -1,3 +1,4 @@
+import { Timestamp } from "firebase/firestore/lite";
 
 export interface Usuario {
     identificador:string,
@@ -50,9 +51,10 @@ export interface Publicacion{
     titulo:string,
     cuerpo:string,
     urlImagen:string,
-    fechaCreacion:Date, 
+    fechaCreacion:Timestamp, 
     fechaVto: Date,
-    creador:string
+    creador:string,
+    
 }
 
 export interface Mensaje{
