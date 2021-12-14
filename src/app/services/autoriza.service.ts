@@ -19,7 +19,7 @@ const db = getFirestore(app);
   providedIn: 'root'
 })
 export class AutorizaService {
-
+private usuario:any;
 private _storage:Storage |null=null;
   constructor(private gp:GooglePlus, private AFAuth:AngularFireAuth,
     private toastCtrl:ToastController,private storage:Storage) {
@@ -39,8 +39,8 @@ private _storage:Storage |null=null;
     'webClientId': "449724327328-qp977ho2tah8j634s7g2q2obppfgp6oi.apps.googleusercontent.com" ,
     'offline': true
        }).then(resp=>{
-         
-
+         this.usuario=resp;
+        
         this.guardarToken(resp.accessToken);
         resolve(resp);
 
@@ -136,6 +136,10 @@ async obtenerUsuario(usuario:Usuario,visitante:Visitante){
   
 }
 
+obtenerNombreUsuarioLogueado():string{
+  console.log(this.usuario.displayName);
+  return this.usuario.displayName;
+}
 }
 
 

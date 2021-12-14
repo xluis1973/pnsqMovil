@@ -93,9 +93,7 @@ export class PublicarService {
     
     
       console.log("publicaciones ",publicacion);
-      
-    
-    
+          
     
     return publicacion;
    }

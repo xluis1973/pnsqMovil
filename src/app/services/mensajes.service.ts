@@ -36,9 +36,11 @@ export class MensajesService {
   
     });
 
+    console.log("Por leer destinos");
     
    (await this.obtenerDestinatarios()).forEach(destino=>{
 
+                 console.log("destinos ",destino);
                  this.enviarNotificacionAWeb(mensaje,destino);
    });
 
@@ -78,7 +80,7 @@ enviarNotificacionAWeb(mensaje:Mensaje,destino:string){
 }
 async obtenerDestinatarios():Promise<string[]>{
   let destinos:string[]=[];
-  const grupoWeb = collection(db, 'publicacion');
+  const grupoWeb = collection(db, 'grupoWeb');
 
   const q = query(grupoWeb);
   const grupoWebSnapshot = await getDocs(q);

@@ -38,4 +38,9 @@ export class UsuarioService {
 
   });
  }
+
+ obtenerNombreUsuarioLogueado():string{
+  console.log(auth.currentUser);
+  return auth.currentUser.displayName
+}
 }
