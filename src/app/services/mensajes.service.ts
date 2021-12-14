@@ -36,35 +36,67 @@ export class MensajesService {
   
     });
 
-    const token=await this.autoSrv.obtenerToken();
+    
+   (await this.obtenerDestinatarios()).forEach(destino=>{
 
-    const data ={
-      notification:{
-        title: mensaje.remitente,
-        body:  mensaje.mensaje,
-        sound: 'default',
-        click_action: 'https://pnsq-1cd2f.web.app/', 
-        icon: 'fcm_push_icon'
-      },
-      to: '/topics/mensajes',
-      priority: 'high'
-    }
-     const headers= new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization':'key=AAAAaLWopaA:APA91bHC-ubI9ojxhcL-t-sudGv9EmX9bz7-RyGQ0J47_pVtjQO4ATRrNpoO3UYUwqOMbPjc5ZDupMfH5gqIFK_BBL6nMD48q_nqUvjwonRAyre0gy9i_b2jk9eakDF4_Uc2_4Wz23vd'
+                 this.enviarNotificacionAWeb(mensaje,destino);
+   });
+
     
-    });
     
-    //const headers = new HttpHeaders().set('Content-Type', 'application/json');
-    //headers.set('Authorization','Bearer AAAAaLWopaA:APA91bHC-ubI9ojxhcL-t-sudGv9EmX9bz7-RyGQ0J47_pVtjQO4ATRrNpoO3UYUwqOMbPjc5ZDupMfH5gqIFK_BBL6nMD48q_nqUvjwonRAyre0gy9i_b2jk9eakDF4_Uc2_4Wz23vd');
+}
+
+enviarNotificacionAWeb(mensaje:Mensaje,destino:string){
+
+  const data ={
+    notification:{
+      title: mensaje.remitente,
+      body:  mensaje.mensaje,
+      sound: 'default',
+      click_action: 'https://pnsq-1cd2f.web.app/', 
+      icon: 'fcm_push_icon'
+    },
+    to: destino,
+    priority: 'high'
+  }
+   const headers= new HttpHeaders({
+    'Content-Type': 'application/json',
+    'Authorization':'key=AAAAaLWopaA:APA91bHC-ubI9ojxhcL-t-sudGv9EmX9bz7-RyGQ0J47_pVtjQO4ATRrNpoO3UYUwqOMbPjc5ZDupMfH5gqIFK_BBL6nMD48q_nqUvjwonRAyre0gy9i_b2jk9eakDF4_Uc2_4Wz23vd'
+  
+  });
+  
+  //const headers = new HttpHeaders().set('Content-Type', 'application/json');
+  //headers.set('Authorization','Bearer AAAAaLWopaA:APA91bHC-ubI9ojxhcL-t-sudGv9EmX9bz7-RyGQ0J47_pVtjQO4ATRrNpoO3UYUwqOMbPjc5ZDupMfH5gqIFK_BBL6nMD48q_nqUvjwonRAyre0gy9i_b2jk9eakDF4_Uc2_4Wz23vd');
+  
+  this.http.post("https://fcm.googleapis.com/fcm/send",data,{headers:headers,responseType:"text"})
+  .subscribe(resp=>{
+            console.log("Respuesta de envio ",resp);
+  });
+  
+
+
+}
+async obtenerDestinatarios():Promise<string[]>{
+  let destinos:string[]=[];
+  const grupoWeb = collection(db, 'publicacion');
+
+  const q = query(grupoWeb);
+  const grupoWebSnapshot = await getDocs(q);
+  
+  const deviceList = grupoWebSnapshot.docs.map(doc => doc.data());
+  
+  deviceList.forEach((device)=>{
+
     
-    this.http.post("https://fcm.googleapis.com/fcm/send",data,{headers:headers,responseType:"text"})
-    .subscribe(resp=>{
-              console.log("Respuesta de envio ",resp);
-    });
+   
+    destinos.push(device.notification_key);
+    
     
     
   
-    
-}
+  });
+  
+  return destinos;
+ }
+
 }
