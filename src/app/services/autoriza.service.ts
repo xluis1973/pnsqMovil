@@ -9,6 +9,7 @@ import { getFirestore, getDocs, collection,setDoc,doc, query, where } from 'fire
 
 
 import {  Usuario, Visitante } from '../interfaces/interfaces';
+import { Storage } from '@ionic/storage-angular';
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth();
@@ -19,17 +20,48 @@ const db = getFirestore(app);
 })
 export class AutorizaService {
 
+private _storage:Storage |null=null;
+  constructor(private gp:GooglePlus, private AFAuth:AngularFireAuth,
+    private toastCtrl:ToastController,private storage:Storage) {
+      this.init();
+     }
 
-  constructor(private gp:GooglePlus, private AFAuth:AngularFireAuth,private toastCtrl:ToastController) { }
+
+     async init(){
+       const storage=await this.storage.create();
+       this._storage=storage;
+     }
 
 
-  loginConGoogle(){
+  loginConGoogle():Promise<any>{
     this.presentToast('antes');
-   return this.gp.login({
+    return new Promise(resolve=>{this.gp.login({
     'webClientId': "449724327328-qp977ho2tah8j634s7g2q2obppfgp6oi.apps.googleusercontent.com" ,
     'offline': true
+       }).then(resp=>{
+         
+
+        this.guardarToken(resp.accessToken);
+        resolve(resp);
+
   });
-}
+
+});
+
+  }
+
+  async guardarToken(token:string){
+
+    await this._storage?.set('token',token);
+    console.log("Token guardado ",token);
+  }
+
+  async obtenerToken():Promise<string>{
+    const token:string=await this._storage.get('token')||null;
+    return new Promise(resolve=>{
+      resolve(token);
+    });
+  }
   async presentToast(mensaje:string) {
     const toast = await this.toastCtrl.create({
       message: 'Saliendo '+mensaje,
@@ -103,6 +135,7 @@ async obtenerUsuario(usuario:Usuario,visitante:Visitante){
 
   
 }
+
 }
 
 

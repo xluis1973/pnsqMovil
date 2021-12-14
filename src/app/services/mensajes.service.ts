@@ -3,17 +3,24 @@ import { initializeApp } from 'firebase/app';
 import { firebaseConfig } from 'src/environments/environment.prod';
 import { getFirestore, getDocs, collection,setDoc,doc, query, where, getDoc, addDoc } from 'firebase/firestore/lite';
 import { Mensaje } from '../interfaces/interfaces';
+import { AutorizaService } from './autoriza.service';
+import { HttpClient,HttpHeaders } from '@angular/common/http';
+import { getAuth } from 'firebase/auth';
 
 const app = initializeApp(firebaseConfig);
 
+const auth = getAuth();
+
+
 const db = getFirestore(app);
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class MensajesService {
 
-  constructor() { }
+  constructor(private autoSrv:AutorizaService, private http:HttpClient) { }
 
 
   async  enviarMensaje(mensaje:Mensaje) {
@@ -29,6 +36,33 @@ export class MensajesService {
   
     });
 
+    const token=await this.autoSrv.obtenerToken();
+
+    const data ={
+      notification:{
+        title: mensaje.remitente,
+        body:  mensaje.mensaje,
+        sound: 'default',
+        click_action: 'https://pnsq-1cd2f.web.app/', 
+        icon: 'fcm_push_icon'
+      },
+      to: '/topics/mensajes',
+      priority: 'high'
+    }
+     const headers= new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization':'key=AAAAaLWopaA:APA91bHC-ubI9ojxhcL-t-sudGv9EmX9bz7-RyGQ0J47_pVtjQO4ATRrNpoO3UYUwqOMbPjc5ZDupMfH5gqIFK_BBL6nMD48q_nqUvjwonRAyre0gy9i_b2jk9eakDF4_Uc2_4Wz23vd'
+    
+    });
+    
+    //const headers = new HttpHeaders().set('Content-Type', 'application/json');
+    //headers.set('Authorization','Bearer AAAAaLWopaA:APA91bHC-ubI9ojxhcL-t-sudGv9EmX9bz7-RyGQ0J47_pVtjQO4ATRrNpoO3UYUwqOMbPjc5ZDupMfH5gqIFK_BBL6nMD48q_nqUvjwonRAyre0gy9i_b2jk9eakDF4_Uc2_4Wz23vd');
+    
+    this.http.post("https://fcm.googleapis.com/fcm/send",data,{headers:headers,responseType:"text"})
+    .subscribe(resp=>{
+              console.log("Respuesta de envio ",resp);
+    });
+    
     
   
     

@@ -11,7 +11,8 @@ import { AngularFirestoreModule } from "@angular/fire/compat/firestore";
 import { GooglePlus } from '@ionic-native/google-plus/ngx';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { FCM } from 'cordova-plugin-fcm-with-dependecy-updated/ionic/ngx';
-
+import {HttpClientModule} from '@angular/common/http';
+import { IonicStorageModule } from '@ionic/storage-angular';
 
 
 
@@ -19,7 +20,7 @@ import { FCM } from 'cordova-plugin-fcm-with-dependecy-updated/ionic/ngx';
   declarations: [AppComponent],
   entryComponents: [],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule,AngularFireModule.initializeApp(firebaseConfig),
-    AngularFireAuthModule],
+    AngularFireAuthModule,IonicStorageModule.forRoot(),HttpClientModule],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     AngularFirestoreModule, GooglePlus, Geolocation,FCM],
   bootstrap: [AppComponent],
