@@ -136,9 +136,9 @@ async obtenerUsuario(usuario:Usuario,visitante:Visitante){
   
 }
 
-obtenerNombreUsuarioLogueado():string{
+obtenerNombreUsuarioLogueado():any{
   console.log(this.usuario.displayName);
-  return this.usuario.displayName;
+  return this.usuario;
 }
 }
 

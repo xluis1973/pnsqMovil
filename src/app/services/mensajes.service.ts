@@ -20,7 +20,7 @@ const db = getFirestore(app);
 })
 export class MensajesService {
 
-  constructor(private autoSrv:AutorizaService, private http:HttpClient) { }
+  constructor( private http:HttpClient) { }
 
 
   async  enviarMensaje(mensaje:Mensaje) {

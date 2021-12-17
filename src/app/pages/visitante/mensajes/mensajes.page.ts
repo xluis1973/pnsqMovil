@@ -22,7 +22,7 @@ export class MensajesPage implements OnInit {
 
   ngOnInit() {
    
-    this.usuarioNombre=this.autorizaService.obtenerNombreUsuarioLogueado();
+    this.usuarioNombre=this.autorizaService.obtenerNombreUsuarioLogueado().displayName;
     console.log("Nombre de usuario ",this.usuarioNombre);
     
 

@@ -1,9 +1,11 @@
 import {  Component,ElementRef,ViewChild } from '@angular/core';
-import { Marker } from 'src/app/interfaces/interfaces';
+import { Marker, Ubicacion } from 'src/app/interfaces/interfaces';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { Geoposition } from '@ionic-native/geolocation';
 import {filter} from 'rxjs/operators';
 import { Subscription } from 'rxjs';
+import { UbicacionService } from 'src/app/services/ubicacion.service';
+import { AutorizaService } from 'src/app/services/autoriza.service';
 declare var google:any;
 
 @Component({
@@ -21,9 +23,10 @@ export class UbicacionPage  {
   map:any;
   @ViewChild('map',{read: ElementRef, static: false}) mapRef:ElementRef;
 
-  constructor(private geolocation: Geolocation) {}
+  constructor(private geolocation: Geolocation, 
+    private ubicacionSrv:UbicacionService, private autoSrv:AutorizaService) {}
 
-
+ private ubicacionActual:Ubicacion=null;
   
 
   ionViewDidEnter(){
@@ -134,6 +137,16 @@ export class UbicacionPage  {
                          
             
           }));
+          //Guardando posicion en BD
+          this.ubicacionActual={
+            latitud: (data as Geoposition).coords.latitude,
+            longitud: (data as Geoposition).coords.longitude,
+            fechaHora: new Date(),
+            usuario: this.autoSrv.obtenerNombreUsuarioLogueado().userId,
+            identificador:''
+          
+          }
+          this.ubicacionSrv.guardarDatos(this.ubicacionActual);
           
      /* this.addMarker({
         position: {
