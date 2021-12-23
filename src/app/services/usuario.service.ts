@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword  } from "firebase/auth";
 import { initializeApp } from 'firebase/app';
 import { firebaseConfig } from 'src/environments/environment.prod';
-import { getFirestore, collection, getDocs, setDoc,doc } from 'firebase/firestore/lite';
+import { getFirestore, collection, getDocs, setDoc,doc } from 'firebase/firestore';
 import { Guia, Usuario } from '../interfaces/interfaces';
 
 const app = initializeApp(firebaseConfig);

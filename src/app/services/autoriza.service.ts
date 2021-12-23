@@ -2,14 +2,15 @@ import { Injectable } from '@angular/core';
 import { GooglePlus } from '@ionic-native/google-plus/ngx';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { ToastController } from '@ionic/angular';
-import { getAuth  } from "firebase/auth";
+
 import { initializeApp } from 'firebase/app';
 import { firebaseConfig } from 'src/environments/environment.prod';
-import { getFirestore, getDocs, collection,setDoc,doc, query, where } from 'firebase/firestore/lite';
+import { getFirestore, getDocs, collection,setDoc,doc, query, where } from 'firebase/firestore';
 
 
 import {  Usuario, Visitante } from '../interfaces/interfaces';
 import { Storage } from '@ionic/storage-angular';
+import { getAuth, GoogleAuthProvider, SignInMethod, signInWithCredential } from 'firebase/auth';
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth();
@@ -33,15 +34,22 @@ private _storage:Storage |null=null;
      }
 
 
-  loginConGoogle():Promise<any>{
+   loginConGoogle():Promise<any>{
     this.presentToast('antes');
     return new Promise(resolve=>{this.gp.login({
     'webClientId': "449724327328-qp977ho2tah8j634s7g2q2obppfgp6oi.apps.googleusercontent.com" ,
     'offline': true
-       }).then(resp=>{
-         this.usuario=resp;
-        
-        this.guardarToken(resp.accessToken);
+       }).then(async (resp)=>{
+                this.usuario=resp;
+                this.guardarToken(resp.accessToken);
+                const googleCredential = GoogleAuthProvider.credential(resp.idToken);
+                signInWithCredential(auth,googleCredential).then(user => {
+                            console.log("Firebase success: " + JSON.stringify(user));
+            
+                        },(err) => {
+                                        console.log("Error in doGoogleLogin " + err);
+          
+                        });
         resolve(resp);
 
   });
@@ -94,6 +102,8 @@ private _storage:Storage |null=null;
 
 async obtenerUsuario(usuario:Usuario,visitante:Visitante){
   //Obteniendo Usario
+  console.log("Obteniendo datos del usuario");
+  
   
   const usuarioCol = collection(db, 'usuario');
 
@@ -116,6 +126,8 @@ async obtenerUsuario(usuario:Usuario,visitante:Visitante){
   });
 
   //Obteniendo visitante
+  console.log("Obtener visitante");
+  
   const visitanteCol = collection(db, 'visitante');
 
   const qVisitante = query(visitanteCol, where("identificador", "==", usuario.identificador));

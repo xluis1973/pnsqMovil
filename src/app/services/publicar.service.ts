@@ -5,7 +5,7 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { getAuth  } from "firebase/auth";
 import { initializeApp } from 'firebase/app';
 import { firebaseConfig } from 'src/environments/environment.prod';
-import { getFirestore, getDocs, collection,setDoc,doc, query, where, orderBy } from 'firebase/firestore/lite';
+import { getFirestore, getDocs, collection,setDoc,doc, query, where, orderBy } from 'firebase/firestore';
 import { Publicacion } from '../interfaces/interfaces';
 import { INotificationPayload } from 'cordova-plugin-fcm-with-dependecy-updated/typings/INotificationPayload';
 
