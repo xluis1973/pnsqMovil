@@ -36,7 +36,9 @@ private _storage:Storage |null=null;
 
    loginConGoogle():Promise<any>{
     this.presentToast('antes');
+    
     return new Promise(resolve=>{this.gp.login({
+      //449724327328-073k2i13c7c8c429140c67srranm0d1e.apps.googleusercontent.com
     'webClientId': "449724327328-qp977ho2tah8j634s7g2q2obppfgp6oi.apps.googleusercontent.com" ,
     'offline': true
        }).then(async (resp)=>{
@@ -52,6 +54,8 @@ private _storage:Storage |null=null;
                         });
         resolve(resp);
 
+  },err=>{
+       console.log("Error ",err);
   });
 
 });

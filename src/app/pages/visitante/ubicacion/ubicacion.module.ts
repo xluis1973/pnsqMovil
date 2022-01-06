@@ -7,12 +7,15 @@ import { IonicModule } from '@ionic/angular';
 import { UbicacionPageRoutingModule } from './ubicacion-routing.module';
 
 import { UbicacionPage } from './ubicacion.page';
+import { ComponentsModule } from '../../../components/components/components.module';
+
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
+    ComponentsModule,
     UbicacionPageRoutingModule
   ],
   declarations: [UbicacionPage]

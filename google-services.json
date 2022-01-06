@@ -31,6 +31,14 @@
           }
         },
         {
+          "client_id": "449724327328-ur9t21dasjkbsaivk1bvloc41a2d325s.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ulp.pnsq",
+            "certificate_hash": "a230d227b75ff04f29010c495bb246719a85615a"
+          }
+        },
+        {
           "client_id": "449724327328-qp977ho2tah8j634s7g2q2obppfgp6oi.apps.googleusercontent.com",
           "client_type": 3
         }

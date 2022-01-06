@@ -30,7 +30,6 @@
     "@ionic/storage-angular": "^3.0.6",
     "cordova": "^10.0.0",
     "cordova-android": "9.1.0",
-    "cordova-plugin-googleplus": "8.5.2",
     "firebase": "^9.0.2",
     "g": "^2.0.1",
     "rxjs": "~6.6.0",
@@ -59,6 +58,7 @@
     "cordova-plugin-device": "^2.0.2",
     "cordova-plugin-fcm-with-dependecy-updated": "^7.8.0",
     "cordova-plugin-geolocation": "^4.1.0",
+    "cordova-plugin-googleplus": "git+https://github.com/EddyVerbruggen/cordova-plugin-googleplus.git",
     "cordova-plugin-ionic-keyboard": "^2.2.0",
     "cordova-plugin-ionic-webview": "^4.2.1",
     "cordova-plugin-splashscreen": "^5.0.2",
@@ -95,10 +95,6 @@
       "cordova-plugin-geolocation": {
         "GPS_REQUIRED": "true"
       },
-      "cordova-plugin-googleplus": {
-        "REVERSED_CLIENT_ID": "449724327328-km2r447tgaj4lv4mkehf295smeqdoitt.apps.googleusercontent.com",
-        "PLAY_SERVICES_VERSION": "15.0.1"
-      },
       "cordova-plugin-androidx": {},
       "cordova-plugin-androidx-adapter": {},
       "cordova-plugin-fcm-with-dependecy-updated": {
@@ -107,6 +103,10 @@
         "ANDROID_FIREBASE_BOM_VERSION": "26.0.0",
         "ANDROID_GOOGLE_SERVICES_VERSION": "4.3.4",
         "ANDROID_GRADLE_TOOLS_VERSION": "4.1.0"
+      },
+      "cordova-plugin-googleplus": {
+        "REVERSED_CLIENT_ID": "com.ulp.pnsq",
+        "WEB_APPLICATION_CLIENT_ID": "449724327328-qp977ho2tah8j634s7g2q2obppfgp6oi.apps.googleusercontent.com"
       }
     },
     "platforms": [
