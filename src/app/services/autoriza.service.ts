@@ -156,6 +156,10 @@ obtenerNombreUsuarioLogueado():any{
   console.log(this.usuario.displayName);
   return this.usuario;
 }
+
+cerrarSesion(){
+  return this.gp.logout();
+}
 }
 
 
