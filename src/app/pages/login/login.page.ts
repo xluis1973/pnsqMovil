@@ -13,13 +13,13 @@ import { AutorizaService } from '../../services/autoriza.service';
 })
 export class LoginPage implements OnInit {
 
-  private res:boolean;
+  private res:string;
 
  
 
   loginUser={
-    email:'luis@mercado.com',
-    password:'123456'
+    email:'jperez@mail.com',
+    password:'a23492009b'
   };
   constructor(private  navCrl:NavController,private userServ:UsuarioService,
      private alertasService:AlertasService, private athSrv:AutorizaService,
@@ -35,7 +35,17 @@ export class LoginPage implements OnInit {
        this.res= await this.userServ.login(this.loginUser.email,this.loginUser.password);
        if(this.res){
 
-                this.navCrl.navigateRoot('/guia',{animated:true});
+               // this.navCrl.navigateRoot('/guia',{animated:true});
+               const navigationExtras:NavigationExtras={
+                queryParams: {
+                  identificador: this.res,
+                  apellido: "guia",
+                  nombre: ""
+                }
+              };
+               //this.navCrl.navigateRoot('/perfil',{animated:true});
+              
+               this.route.navigate(['perfil'],navigationExtras);
                 
 
        }else {

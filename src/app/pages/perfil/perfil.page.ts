@@ -4,6 +4,7 @@ import { NavController } from '@ionic/angular';
 import { ActivatedRoute } from '@angular/router';
 import { AutorizaService } from 'src/app/services/autoriza.service';
 import { PublicarService } from 'src/app/services/publicar.service';
+import { Guia } from '../../interfaces/interfaces';
 
 @Component({
   selector: 'app-perfil',
@@ -30,6 +31,16 @@ export class PerfilPage implements OnInit, AfterViewInit {
 
 
   };
+  guia:Guia={
+    identificador:"",
+    usuario:"",
+    cuil:"",
+    nroHabiliatacion:-1,
+    fHabilitacion:null,
+    vtoHabilitacion:null,
+    email:"",
+    password:""
+  }
   constructor(private navCtrl:NavController, private activatedRoute:ActivatedRoute, 
     private autorizaService:AutorizaService, private publicarSrv:PublicarService) { }
   ngAfterViewInit(): void {
@@ -51,7 +62,17 @@ export class PerfilPage implements OnInit, AfterViewInit {
     }
   );
 
-  await this.autorizaService.obtenerUsuario(this.usuario, this.visitante);
+if(this.usuario.apellido=="guia"){
+
+  await this.autorizaService.obtenerUsuario(this.usuario, null,this.guia);
+
+} else {
+
+  await this.autorizaService.obtenerUsuario(this.usuario, this.visitante,null);
+
+}
+
+  
 
   this.botonDesactivado=false;
  

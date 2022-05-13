@@ -8,7 +8,7 @@ import { firebaseConfig } from 'src/environments/environment.prod';
 import { getFirestore, getDocs, collection,setDoc,doc, query, where } from 'firebase/firestore';
 
 
-import {  Usuario, Visitante } from '../interfaces/interfaces';
+import { Usuario, Visitante, Guia } from '../interfaces/interfaces';
 import { Storage } from '@ionic/storage-angular';
 import { getAuth, GoogleAuthProvider, SignInMethod, signInWithCredential } from 'firebase/auth';
 
@@ -104,7 +104,7 @@ private _storage:Storage |null=null;
     
 }
 
-async obtenerUsuario(usuario:Usuario,visitante:Visitante){
+async obtenerUsuario(usuario:Usuario,visitante?:Visitante,guia?:Guia){
   //Obteniendo Usario
   console.log("Obteniendo datos del usuario");
   
@@ -129,7 +129,9 @@ async obtenerUsuario(usuario:Usuario,visitante:Visitante){
   
   });
 
-  //Obteniendo visitante
+  if(visitante){
+
+    //Obteniendo visitante
   console.log("Obtener visitante");
   
   const visitanteCol = collection(db, 'visitante');
@@ -148,6 +150,37 @@ async obtenerUsuario(usuario:Usuario,visitante:Visitante){
   
   
   });
+
+
+  } else {
+
+     //Obteniendo visitante
+  console.log("Obtener Guía de Turismo");
+  
+  const guiaCol = collection(db, 'guia');
+
+  const qGuia = query(guiaCol, where("identificador", "==", usuario.identificador));
+  const guiaSnapshot = await getDocs(qGuia);
+  
+  
+  const guiaList = guiaSnapshot.docs.map(doc => doc.data());
+  guiaList.forEach((user)=>{
+    guia.identificador=user.identificador;
+    guia.usuario=user.usuario,
+    guia.cuil=user.cuil,
+    guia.nroHabiliatacion=user.nroHabilitacion,
+    guia.fHabilitacion=user.fHabilitacion,
+    guia.vtoHabilitacion=user.vtoHabilitacion,
+    guia.email=user.email,
+    guia.password=user.password
+    //console.log("visitante ",user);
+  
+  
+  });
+
+
+  }
+  
 
   
 }
