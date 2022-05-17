@@ -20,7 +20,7 @@ const db = getFirestore(app);
   providedIn: 'root'
 })
 export class AutorizaService {
-private usuario:any;
+private usuario:Usuario;
 private _storage:Storage |null=null;
   constructor(private gp:GooglePlus, private AFAuth:AngularFireAuth,
     private toastCtrl:ToastController,private storage:Storage) {
@@ -88,7 +88,7 @@ private _storage:Storage |null=null;
     //console.log('Guardando');
   
     const usuarioCol=doc(db, "usuario", usuario.identificador );
-    const visitanteCol=doc(db, "visitante", visitante.identificador );
+   
     await setDoc(usuarioCol, usuario).catch((error)=>{
   
       console.log('Error al guardar Usuario ',error.message);
@@ -96,6 +96,7 @@ private _storage:Storage |null=null;
     });
 if(visitante){
 
+  const visitanteCol=doc(db, "visitante", visitante.identificador );
   await setDoc(visitanteCol, visitante).catch((error)=>{
   
     //console.log('Error al guardar Visitante ',error.message);
@@ -122,14 +123,14 @@ async obtenerUsuario(usuario:Usuario,visitante?:Visitante,guia?:Guia){
   
   usuarioList.forEach((user)=>{
     usuario.identificador=user.identificador;
-    usuario.activo=user.activo;
+    usuario.activo=true;
     usuario.apellido=user.apellido;
     usuario.ciudad=user.ciudad;
     usuario.domicilio=user.domicilio;
     usuario.nombre=user.nombre;
     usuario.telefono=user.telefono;
     //console.log("usuario ",user);
-    
+    this.usuario=usuario;
   
   });
 
@@ -190,11 +191,13 @@ async obtenerUsuario(usuario:Usuario,visitante?:Visitante,guia?:Guia){
 }
 
 obtenerNombreUsuarioLogueado():any{
-  console.log(this.usuario.displayName);
+  //console.log(this.usuario.displayName);
   return this.usuario;
 }
 
-cerrarSesion(){
+ cerrarSesion(){
+  this.usuario.activo=false;
+   this.guardarDatos(this.usuario);
   return this.gp.logout();
 }
 }
