@@ -14,6 +14,8 @@ import { Guia } from '../../interfaces/interfaces';
 export class PerfilPage implements OnInit, AfterViewInit {
 
   botonDesactivado=true;
+  esGuia=false;
+  esVisitante=false;
   usuario:Usuario={
     identificador:"",
     apellido: "",
@@ -64,9 +66,13 @@ export class PerfilPage implements OnInit, AfterViewInit {
 
 if(this.usuario.apellido=="guia"){
 
+  this.esGuia=true;
+  this.esVisitante=false;
   await this.autorizaService.obtenerUsuario(this.usuario, null,this.guia);
 
 } else {
+  this.esGuia=false;
+  this.esVisitante=true;
 
   await this.autorizaService.obtenerUsuario(this.usuario, this.visitante,null);
 
@@ -83,9 +89,20 @@ if(this.usuario.apellido=="guia"){
 confirmar(formulario){
 
   
+if(this.esVisitante){
 
+  //Guardando datos del Visitante
   this.autorizaService.guardarDatos(this.usuario,this.visitante);
   this.navCtrl.navigateRoot("/visitante",{animated:true});
+
+} else{
+  //Guardando datos del guia
+
+  this.autorizaService.guardarDatos(this.usuario);
+  this.navCtrl.navigateRoot("/guia",{animated:true});
+
+}
+  
 
 }
 }

@@ -18,8 +18,8 @@ export class LoginPage implements OnInit {
  
 
   loginUser={
-    email:'jperez@mail.com',
-    password:'a23492009b'
+    email:'ljavier@mail.com',
+    password:'12345678'
   };
   constructor(private  navCrl:NavController,private userServ:UsuarioService,
      private alertasService:AlertasService, private athSrv:AutorizaService,

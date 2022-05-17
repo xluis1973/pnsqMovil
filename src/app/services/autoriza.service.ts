@@ -83,7 +83,7 @@ private _storage:Storage |null=null;
     
   }
 
-  async  guardarDatos(usuario:Usuario,visitante:Visitante) {
+  async  guardarDatos(usuario:Usuario,visitante?:Visitante) {
 
     //console.log('Guardando');
   
@@ -94,12 +94,16 @@ private _storage:Storage |null=null;
       console.log('Error al guardar Usuario ',error.message);
   
     });
+if(visitante){
 
-    await setDoc(visitanteCol, visitante).catch((error)=>{
+  await setDoc(visitanteCol, visitante).catch((error)=>{
   
-      //console.log('Error al guardar Visitante ',error.message);
+    //console.log('Error al guardar Visitante ',error.message);
+
+  });
+
+}
   
-    });
  
     
 }
@@ -168,7 +172,7 @@ async obtenerUsuario(usuario:Usuario,visitante?:Visitante,guia?:Guia){
     guia.identificador=user.identificador;
     guia.usuario=user.usuario,
     guia.cuil=user.cuil,
-    guia.nroHabiliatacion=user.nroHabilitacion,
+    guia.nroHabiliatacion=user.nroHabiliatacion,
     guia.fHabilitacion=user.fHabilitacion,
     guia.vtoHabilitacion=user.vtoHabilitacion,
     guia.email=user.email,

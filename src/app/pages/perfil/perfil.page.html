@@ -48,14 +48,19 @@
                              required [(ngModel)]="usuario.telefono"></ion-input>
                 </ion-item>
 
-                <ion-item>
+                <ion-item *ngIf="esGuia">
+                  <ion-label>Nro.Habilitación</ion-label>
+                  <ion-label >{{guia.nroHabiliatacion}}</ion-label>
+                </ion-item>
+
+                <ion-item *ngIf="esVisitante">
                   <ion-label>Pais</ion-label>
                   <ion-input name="pais"
                              type="text"
                              required [(ngModel)]="visitante.pais"></ion-input>
                 </ion-item>
 
-                <ion-item>
+                <ion-item *ngIf="esVisitante">
                   <ion-label>Provincia</ion-label>
                   <ion-input name="provincia"
                              type="text"
