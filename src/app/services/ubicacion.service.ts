@@ -17,7 +17,7 @@ private ubicacion:Ubicacion;
 
 async  guardarDatos(localizacion:Ubicacion) {
 
-  console.log('Guardando');
+  console.log('Guardando Ubicación');
 
   const ubicacionCol=doc(db, "ubicacion", localizacion.usuario );
   await setDoc(ubicacionCol, localizacion).catch((error)=>{

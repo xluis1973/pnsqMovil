@@ -190,7 +190,7 @@ async obtenerUsuario(usuario:Usuario,visitante?:Visitante,guia?:Guia){
   
 }
 
-obtenerNombreUsuarioLogueado():any{
+obtenerNombreUsuarioLogueado():Usuario{
   console.log("Usuario Logueado");
   return this.usuario;
 }

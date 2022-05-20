@@ -6,6 +6,7 @@ import { Mensaje } from 'src/app/interfaces/interfaces';
 
 
 import { AutorizaService } from 'src/app/services/autoriza.service';
+import { Usuario } from '../../../interfaces/interfaces';
 
 
 @Component({
@@ -18,11 +19,11 @@ export class MensajesPage implements OnInit {
   constructor(private alertCrl:AlertasService,private navCtrl:NavController,
    private mensajesService:MensajesService , 
    private autorizaService:AutorizaService) { }
-   private usuarioNombre:string;
+   private usuarioNombre:Usuario;
 
   ngOnInit() {
    
-    this.usuarioNombre=this.autorizaService.obtenerNombreUsuarioLogueado().displayName;
+    this.usuarioNombre=this.autorizaService.obtenerNombreUsuarioLogueado();
     console.log("Nombre de usuario ",this.usuarioNombre);
     
 
@@ -30,9 +31,9 @@ export class MensajesPage implements OnInit {
 
   auxilio(){
     const mensaje:Mensaje={
-      identificador:'',
+      identificador:this.usuarioNombre.identificador,
       mensaje: 'Médico',
-      remitente: this.usuarioNombre||'user',
+      remitente: this.usuarioNombre.apellido+", "+this.usuarioNombre.nombre||'user',
       fechaEnvio: new Date(), 
       ultimaUbicacion: 'id de la ultima ubicación de este usuario'
      
@@ -41,9 +42,9 @@ export class MensajesPage implements OnInit {
   } 
   policia(){
     const mensaje:Mensaje={
-      identificador:'',
+      identificador:this.usuarioNombre.identificador,
       mensaje: 'Policía',
-      remitente: this.usuarioNombre||'user',
+      remitente: this.usuarioNombre.apellido+", "+this.usuarioNombre.nombre||'user',
       fechaEnvio: new Date(), 
       ultimaUbicacion: 'id de la ultima ubicación de este usuario'
     };
@@ -52,9 +53,9 @@ export class MensajesPage implements OnInit {
   incendio(){
     
     const mensaje:Mensaje={
-      identificador:'',
+      identificador:this.usuarioNombre.identificador,
       mensaje: 'Incendio',
-      remitente: this.usuarioNombre||'user',
+      remitente: this.usuarioNombre.apellido+", "+this.usuarioNombre.nombre||'user',
       fechaEnvio: new Date(), 
       ultimaUbicacion: 'id de la ultima ubicación de este usuario'
     };

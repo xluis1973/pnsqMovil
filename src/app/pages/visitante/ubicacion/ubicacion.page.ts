@@ -142,7 +142,7 @@ export class UbicacionPage  {
             latitud: (data as Geoposition).coords.latitude,
             longitud: (data as Geoposition).coords.longitude,
             fechaHora: new Date(),
-            usuario: this.autoSrv.obtenerNombreUsuarioLogueado().userId,
+            usuario: this.autoSrv.obtenerNombreUsuarioLogueado().identificador,
             identificador:''
           
           }
