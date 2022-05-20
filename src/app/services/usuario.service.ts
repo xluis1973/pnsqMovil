@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword  } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut  } from "firebase/auth";
 import { initializeApp } from 'firebase/app';
 import { firebaseConfig } from 'src/environments/environment.prod';
 import { getFirestore, collection, getDocs, setDoc,doc, query, where } from 'firebase/firestore';
@@ -74,5 +74,8 @@ async obtenerUsuario(idUser:string){
     
   
   });
+
 }
+
+
 }

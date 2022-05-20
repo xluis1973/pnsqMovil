@@ -32,7 +32,7 @@ export class MensajesPage implements OnInit {
     const mensaje:Mensaje={
       identificador:'',
       mensaje: 'Médico',
-      remitente: this.usuarioNombre,
+      remitente: this.usuarioNombre||'user',
       fechaEnvio: new Date(), 
       ultimaUbicacion: 'id de la ultima ubicación de este usuario'
      
@@ -43,7 +43,7 @@ export class MensajesPage implements OnInit {
     const mensaje:Mensaje={
       identificador:'',
       mensaje: 'Policía',
-      remitente: this.usuarioNombre,
+      remitente: this.usuarioNombre||'user',
       fechaEnvio: new Date(), 
       ultimaUbicacion: 'id de la ultima ubicación de este usuario'
     };
@@ -54,7 +54,7 @@ export class MensajesPage implements OnInit {
     const mensaje:Mensaje={
       identificador:'',
       mensaje: 'Incendio',
-      remitente: this.usuarioNombre,
+      remitente: this.usuarioNombre||'user',
       fechaEnvio: new Date(), 
       ultimaUbicacion: 'id de la ultima ubicación de este usuario'
     };

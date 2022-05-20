@@ -29,7 +29,7 @@ export class MensajesService {
   
     // De esta forma guarda un documento cuyo id es random
     const col=collection(db,"mensaje");
-    
+    console.log(mensaje);
     await addDoc(col,mensaje).catch((error)=>{
   
       console.log('Error al guardar Usuario ',error.message);

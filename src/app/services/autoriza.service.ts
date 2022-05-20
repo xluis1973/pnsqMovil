@@ -10,7 +10,7 @@ import { getFirestore, getDocs, collection,setDoc,doc, query, where } from 'fire
 
 import { Usuario, Visitante, Guia } from '../interfaces/interfaces';
 import { Storage } from '@ionic/storage-angular';
-import { getAuth, GoogleAuthProvider, SignInMethod, signInWithCredential } from 'firebase/auth';
+import { getAuth, GoogleAuthProvider, SignInMethod, signInWithCredential, signOut } from 'firebase/auth';
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth();
@@ -191,7 +191,7 @@ async obtenerUsuario(usuario:Usuario,visitante?:Visitante,guia?:Guia){
 }
 
 obtenerNombreUsuarioLogueado():any{
-  //console.log(this.usuario.displayName);
+  console.log("Usuario Logueado");
   return this.usuario;
 }
 
@@ -200,6 +200,14 @@ obtenerNombreUsuarioLogueado():any{
    this.guardarDatos(this.usuario);
   return this.gp.logout();
 }
+
+cerrarSesionGuia(){
+  this.usuario.activo=false;
+   this.guardarDatos(this.usuario);
+  
+  return  signOut(auth);
+}
+
 }
 
 

@@ -4,18 +4,17 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { GuiaPageRoutingModule } from './guia-routing.module';
+import { MensajesPageRoutingModule } from './mensajes-routing.module';
 
-import { GuiaPage } from './guia.page';
+import { MensajesPage } from './mensajes.page';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    GuiaPageRoutingModule
-    
+    MensajesPageRoutingModule
   ],
-  declarations: [GuiaPage]
+  declarations: [MensajesPage]
 })
-export class GuiaPageModule {}
+export class MensajesPageModule {}
