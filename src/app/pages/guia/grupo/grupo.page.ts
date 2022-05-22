@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { GruposService } from '../../../services/grupos.service';
 
 @Component({
   selector: 'app-grupo',
@@ -7,9 +8,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class GrupoPage implements OnInit {
 
-  constructor() { }
+  constructor(private grupoSrv:GruposService) { }
 
   ngOnInit() {
+    this.grupoSrv.obtenerVisitantes().then(resp=>{
+      console.log("visitantes Activos Fin de Lectura");
+    });
   }
 
 }
