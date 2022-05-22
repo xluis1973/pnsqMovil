@@ -17,16 +17,18 @@ const db = getFirestore(app);
   providedIn: 'root'
 })
 export class GruposService {
-  visitantesActivos:Visitante[]=[];
-  idUsuariosActivos:String[]=[];
-  usuariosActivos:Usuario[]= [];
-  visitantesEnGrupos:String[]=[];
+  
   constructor() { }
 
 
   async obtenerVisitantes():Promise<Usuario[]>{
     //Obtengo los usuarios activos (es decir los que están logueados)
-    this.visitantesActivos=[];
+   const visitantesActivos:Visitante[]=[];
+  const idUsuariosActivos:String[]=[];
+  let usuariosActivos:Usuario[]= [];
+  const visitantesEnGrupos:String[]=[];
+
+    
     const usuariosCol = collection(db, 'usuario');
     const visitantesCol=collection(db,'visitante');
     const grupoCol=collection(db,"grupo");
@@ -38,7 +40,7 @@ export class GruposService {
     gruposList.forEach((grup)=>{
       let lectura:Grupo=grup as Grupo;
         lectura.visitantes.forEach((visit)=>{
-          this.visitantesEnGrupos.push(visit);
+          visitantesEnGrupos.push(visit);
         })
     });
 
@@ -48,12 +50,12 @@ export class GruposService {
     const usuariosList=usuariosSnapshot.docs.map(doc=>doc.data());
     usuariosList.forEach((user) => {
       let lectura: Usuario = user as Usuario;
-      this.idUsuariosActivos.push(lectura.identificador);
-      this.usuariosActivos.push(lectura);
+      idUsuariosActivos.push(lectura.identificador);
+      usuariosActivos.push(lectura);
 
     })
-    console.log("usuarios Activos ",this.usuariosActivos);
-    const q2 = query(visitantesCol,where("usuario","in",this.idUsuariosActivos));
+    console.log("usuarios Activos ",usuariosActivos);
+    const q2 = query(visitantesCol,where("usuario","in",idUsuariosActivos));
 
     const visitantesSnapshot = await getDocs(q2);
     
@@ -63,17 +65,17 @@ export class GruposService {
 
       let lectura:Visitante=visita as Visitante;
      
-      this.visitantesActivos.push(lectura);
+      visitantesActivos.push(lectura);
            
     
     });
-    console.log("visitantes Activos ",this.visitantesActivos);
+    console.log("visitantes Activos ",visitantesActivos);
     
       
-  const nuevo=this.usuariosActivos.map((elem)=>{
+  const nuevo=usuariosActivos.map((elem)=>{
 
     
-    const resultado=this.visitantesActivos.find(dato=> dato.identificador===elem.identificador);
+    const resultado=visitantesActivos.find(dato=> dato.identificador===elem.identificador);
     console.log("Visitante encontrado ",resultado);
     if (resultado!=null){
       return elem;
@@ -86,12 +88,12 @@ export class GruposService {
 
     });
   
-    this.usuariosActivos=nuevo.filter(elem=>elem.identificador != '--');
+    usuariosActivos=nuevo.filter(elem=>elem.identificador != '--');
     
 
-  const usuariosSinGuia=this.usuariosActivos.map((elem)=>{
+  const usuariosSinGuia=usuariosActivos.map((elem)=>{
 
-    const resultado=this.visitantesEnGrupos.find(dato=> dato==elem.identificador);
+    const resultado=visitantesEnGrupos.find(dato=> dato==elem.identificador);
     console.log("Visitante encontrado sin guia ",resultado);
     if (resultado!=null){
       elem.identificador="--"
@@ -104,11 +106,11 @@ export class GruposService {
 
 
   });
-  this.usuariosActivos=usuariosSinGuia.filter(elem=>elem.identificador != '--');
+  usuariosActivos=usuariosSinGuia.filter(elem=>elem.identificador != '--');
 
 
-    console.log("usuarios Activos Visitantes",this.usuariosActivos);
-    return this.usuariosActivos;
+    console.log("usuarios Activos Visitantes",usuariosActivos);
+    return usuariosActivos;
    }
 
 }
