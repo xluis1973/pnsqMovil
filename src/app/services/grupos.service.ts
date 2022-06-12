@@ -5,6 +5,8 @@ import { getFirestore, collection,setDoc,doc, query, where, getDoc, addDoc, getD
 import { Grupo, Visitante, Usuario } from '../interfaces/interfaces';
 
 import { getAuth } from 'firebase/auth';
+import { registerLocaleData } from '@angular/common';
+
 
 const app = initializeApp(firebaseConfig);
 
@@ -17,32 +19,73 @@ const db = getFirestore(app);
   providedIn: 'root'
 })
 export class GruposService {
-  
+
+   visitantesActivos:Visitante[]=[];
+    visitantesEnGrupos:string[]=[];
+    visitantesDeEsteG:string[]=[];
+     usuariosActivos:Usuario[]= [];
+     idUsuariosActivos:string[]=[];
+
   constructor() { }
 
 
-  async obtenerVisitantes():Promise<Usuario[]>{
-    //Obtengo los usuarios activos (es decir los que están logueados)
-   const visitantesActivos:Visitante[]=[];
-  const idUsuariosActivos:String[]=[];
-  let usuariosActivos:Usuario[]= [];
-  const visitantesEnGrupos:String[]=[];
+  async obtenerVisitantes(idGuiaResponsable:string):Promise<Usuario[]>{
+ 
+    this.visitantesActivos=[];
+    this.visitantesEnGrupos=[];
+    this.visitantesDeEsteG=[];
+     this.usuariosActivos= [];
+     this.idUsuariosActivos=[];
 
-    
-    const usuariosCol = collection(db, 'usuario');
-    const visitantesCol=collection(db,'visitante');
+      await this.visitantesDeGruposActivos(idGuiaResponsable);
+      await this.visitantesActivosSinGrupo();
+  
+       return this.usuariosActivos;
+  
+  
+
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   async activosDeEsteGrupo( guiaResponsable:string){
+  
     const grupoCol=collection(db,"grupo");
+    const qGrupos=query(grupoCol,where("activo","==",true),where("guiaResponsable","==",guiaResponsable));
+    const grupoSnapshot= await getDocs(qGrupos);
+    const gruposList=grupoSnapshot.docs.map(doc=>doc.data());
+    gruposList.forEach((grup)=>{
+    
+      let lectura:Grupo=grup as Grupo;
+      console.log("Visitantes de este grupo ",lectura.visitantes);
+      lectura.visitantes.forEach((visit)=>{
+        this.visitantesDeEsteG.push(visit);
+      });
+    });
+      
+   }
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   async visitantesDeGruposActivos(guiaResponsable:string){
 
-
-    const qGrupos=query(grupoCol,where("activo","==",true));
+   
+    const grupoCol=collection(db,"grupo");
+    const qGrupos=query(grupoCol,where("activo","==",true),where("guiaResponsable","!=",guiaResponsable));
     const grupoSnapshot= await getDocs(qGrupos);
     const gruposList=grupoSnapshot.docs.map(doc=>doc.data());
     gruposList.forEach((grup)=>{
       let lectura:Grupo=grup as Grupo;
         lectura.visitantes.forEach((visit)=>{
-          visitantesEnGrupos.push(visit);
+          this.visitantesEnGrupos.push(visit);
         })
     });
+
+    
+
+   }
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   async visitantesActivosSinGrupo(){
+
+    
+    const usuariosCol = collection(db, 'usuario');
+    const visitantesCol=collection(db,'visitante');
 
     const q = query(usuariosCol,where("activo","==",true));
 
@@ -50,12 +93,14 @@ export class GruposService {
     const usuariosList=usuariosSnapshot.docs.map(doc=>doc.data());
     usuariosList.forEach((user) => {
       let lectura: Usuario = user as Usuario;
-      idUsuariosActivos.push(lectura.identificador);
-      usuariosActivos.push(lectura);
+      this.idUsuariosActivos.push(lectura.identificador);
+      this.usuariosActivos.push(lectura);
 
     })
-    console.log("usuarios Activos ",usuariosActivos);
-    const q2 = query(visitantesCol,where("usuario","in",idUsuariosActivos));
+
+    console.log("usuarios Activos ",this.usuariosActivos);
+    //Se queda con los usuarios activos que son visitantes
+    const q2 = query(visitantesCol,where("usuario","in",this.idUsuariosActivos));
 
     const visitantesSnapshot = await getDocs(q2);
     
@@ -65,52 +110,73 @@ export class GruposService {
 
       let lectura:Visitante=visita as Visitante;
      
-      visitantesActivos.push(lectura);
+      this.visitantesActivos.push(lectura);
            
     
     });
-    console.log("visitantes Activos ",visitantesActivos);
+
+   let visitasSinGrupo=this.visitantesActivos.map(elem=>{
+       if(this.visitantesEnGrupos.find(dato=> dato==elem.identificador)!=null){
+            return null;
+       }else {
+         return elem;
+       }
+      });
+    visitasSinGrupo= visitasSinGrupo.filter(elem=>elem!=null);   
+    console.log("Visitantes en grupos activos que no es este grupo ",this.visitantesEnGrupos);
+    console.log("visitantes Activos sin Grupos ",this.visitantesActivos);
+    console.log("visitantes Activos sin Grupos ",visitasSinGrupo);
     
-      
-  const nuevo=usuariosActivos.map((elem)=>{
-
-    
-    const resultado=visitantesActivos.find(dato=> dato.identificador===elem.identificador);
-    console.log("Visitante encontrado ",resultado);
-    if (resultado!=null){
-      return elem;
-    }else{
-
-      elem.identificador="--";
-      return elem;
-
-    }
-
+    this.usuariosActivos=this.usuariosActivos.map((elem)=>{
+      if(visitasSinGrupo.find(dato=> dato.identificador==elem.identificador)!=null){
+        return elem;
+      }else{
+        return null;
+      }
     });
-  
-    usuariosActivos=nuevo.filter(elem=>elem.identificador != '--');
-    
 
-  const usuariosSinGuia=usuariosActivos.map((elem)=>{
+    this.usuariosActivos=this.usuariosActivos.filter(elem=>elem!=null);
 
-    const resultado=visitantesEnGrupos.find(dato=> dato==elem.identificador);
-    console.log("Visitante encontrado sin guia ",resultado);
-    if (resultado!=null){
-      elem.identificador="--"
-      return elem;
-    }else{
-      return elem;
+   }
+ //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////  
+   async crearGrupo(grupo:Grupo){
+
+    const grupoCol=collection(db,"grupo");
+    grupo.activo=true;
+    await addDoc(grupoCol,grupo);
+ 
+
+
+   }
+
+    async grupoActivo(grupo:Grupo):Promise<Grupo>{
+
+
+
+      const grupoCole=collection(db,"grupo");
+    const qGrupos=query(grupoCole,where("activo","==",true),where("guiaResponsable","==",grupo.guiaResponsable));
+    const grupoSnapshot= await getDocs(qGrupos);
+    let identificador=grupoSnapshot.docs[0].data() as Grupo;
+    return identificador;
 
     }
 
 
+   
+   async desarmarGrupo(grupo:Grupo){
+    const grupoCole=collection(db,"grupo");
+    const qGrupos=query(grupoCole,where("activo","==",true),where("guiaResponsable","==",grupo.guiaResponsable));
+    const grupoSnapshot= await getDocs(qGrupos);
+    let identificador=grupoSnapshot.docs[0].id;
+   
+    const grupoCol=doc(db,"grupo",identificador);
+    grupo.activo=false
+    //const qGrupos=query(grupoCol,where("activo","==",true),where("guiaResponsable","==",grupo.guiaResponsable));
+    await setDoc(grupoCol,grupo).catch(error=>console.log("Error al desarmar Grupo",error));
 
-  });
-  usuariosActivos=usuariosSinGuia.filter(elem=>elem.identificador != '--');
 
-
-    console.log("usuarios Activos Visitantes",usuariosActivos);
-    return usuariosActivos;
    }
 
 }
+
+

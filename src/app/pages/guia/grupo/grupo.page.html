@@ -8,8 +8,9 @@
                   <ion-col>
                     <ion-list>
                         <ion-item>
-                            <ion-label >Fecha de Vencimiento</ion-label>
-                            <ion-input name="venc"                   
+                            <ion-label >Fecha de Creación</ion-label>
+                            <ion-input name="fechaCreacion"
+                            required [(ngModel)]="grupo.fecjaCreacion"                   
                                                    type="date"
                                                    ></ion-input>
 
@@ -17,6 +18,7 @@
                         <ion-item>
                             <ion-label >Recorrido</ion-label>
                             <ion-input name="recorrido" 
+                            required [(ngModel)]="grupo.recorrido"
                                     type="text"
                                      ></ion-input>
                         </ion-item>
@@ -37,6 +39,20 @@
 
 
                 </ion-row>
+                <ion-row *ngIf="crearGrupoV">
+                    <ion-col>
+                        <ion-button expand="block" color="primary" (click)="crearGrupo()">Crear Grupo
+
+                        </ion-button>
+                    </ion-col>
+                </ion-row>
+                <ion-row *ngIf="desarmarGrupoV">
+                  <ion-col>
+                      <ion-button expand="block" color="primary" (click)="desarmarGrupo()">DesarmarGrupo
+
+                      </ion-button>
+                  </ion-col>
+              </ion-row>
                
               </ion-grid>
 
