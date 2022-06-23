@@ -50,8 +50,9 @@ export class UbicacionPage  {
 
           position:new google.maps.LatLng(ubicacion.latitud,ubicacion.longitud),
           draggable:false,
+          
           label: {
-            fontSize: "8pt",
+            fontSize: "6pt",
             text: ubicacion.usuario
         },
           map: this.map,
@@ -77,7 +78,7 @@ export class UbicacionPage  {
 
           const infoWindow = new google.maps.InfoWindow();
           infoWindow.close();
-          infoWindow.setContent(marcador.getTitle());
+          infoWindow.setContent('marcador.getTitle()');
           infoWindow.open(marcador.getMap(), marcador);
 
         });
@@ -85,8 +86,9 @@ export class UbicacionPage  {
         
       });
       if(marcador){
+        console.log("Haciendo zoom");
         this.map.setCenter(marcador.getPosition());
-        this.map.setZoom(10);
+        this.map.setZoom(20);
       }
 
     });
@@ -125,7 +127,7 @@ export class UbicacionPage  {
     setTimeout(() => {
       //Coordenadas PNSQ LatLng(-33.1726642,-66.3098262)
       this.map.setCenter(new google.maps.LatLng(this.miPosicionActual.coords.latitude,this.miPosicionActual.coords.longitude));
-      this.map.setZoom(15);
+      this.map.setZoom(20);
       
 }, 3000);
   

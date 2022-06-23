@@ -30,9 +30,6 @@ export class GrupoPage {
     
 
   async ionViewWillEnter() {
-    this.listaUsuarios.splice(0, this.listaUsuarios.length);
-    this.listaUsuarios= await this.grupoSrv.obtenerVisitantes(this.autSrv.obtenerNombreUsuarioLogueado().identificador);
-    this.listaUsuarios.forEach(elem=>{if(elem.ciudad!='success'){elem.ciudad='primary';}});
     this.grupo=await this.grupoSrv.grupoActivo(this.grupo);
     //Paso el id del guía responsable.
     //await this.grupoSrv.activosDeEsteGrupo("2222");
@@ -42,6 +39,10 @@ export class GrupoPage {
       this.grupoGuardado=true;
       this.marcarUsuariosDeEsteGrupo();
     }
+    this.listaUsuarios.splice(0, this.listaUsuarios.length);
+    this.listaUsuarios= await this.grupoSrv.obtenerVisitantes(this.autSrv.obtenerNombreUsuarioLogueado().identificador,this.desarmarGrupoV);
+    this.listaUsuarios.forEach(elem=>{if(elem.ciudad!='success'){elem.ciudad='primary';}});
+   
   }
   marcarUsuariosDeEsteGrupo() {
     this.listaUsuarios.forEach(elem=>{elem.ciudad='success';});

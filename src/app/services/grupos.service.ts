@@ -29,17 +29,22 @@ export class GruposService {
   constructor() { }
 
 
-  async obtenerVisitantes(idGuiaResponsable:string):Promise<Usuario[]>{
+  async obtenerVisitantes(idGuiaResponsable:string,hayGrupo:boolean):Promise<Usuario[]>{
  
     this.visitantesActivos=[];
     this.visitantesEnGrupos=[];
     this.visitantesDeEsteG=[];
      this.usuariosActivos= [];
      this.idUsuariosActivos=[];
-
+  if(!hayGrupo){
       await this.visitantesDeGruposActivos(idGuiaResponsable);
       await this.visitantesActivosSinGrupo();
-  
+  }else {
+
+    await this.activosDeEsteGrupo(idGuiaResponsable);
+    
+
+  }
        return this.usuariosActivos;
   
   
@@ -60,6 +65,21 @@ export class GruposService {
         this.visitantesDeEsteG.push(visit);
       });
     });
+
+
+    //Une con coleccion Usuario
+    const usuariosCol = collection(db, 'usuario');
+   
+
+    const q = query(usuariosCol,where("identificador","in",this.visitantesDeEsteG));
+
+    const usuariosSnapshot = await getDocs(q);
+    const usuariosLista=usuariosSnapshot.docs.map(doc=>doc.data());
+    usuariosLista.forEach((user)=>{
+
+      this.usuariosActivos.push(user as Usuario);
+    });
+
       
    }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -156,8 +176,10 @@ export class GruposService {
       const grupoCole=collection(db,"grupo");
     const qGrupos=query(grupoCole,where("activo","==",true),where("guiaResponsable","==",grupo.guiaResponsable));
     const grupoSnapshot= await getDocs(qGrupos);
+    if(grupoSnapshot.docs.length>0){
     let identificador=grupoSnapshot.docs[0].data() as Grupo;
     return identificador;
+    }else return grupo;
 
     }
 
