@@ -6,6 +6,7 @@ import {filter} from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 import { UbicacionService } from 'src/app/services/ubicacion.service';
 import { AutorizaService } from 'src/app/services/autoriza.service';
+import { MonitoreoService } from '../../../services/monitoreo.service';
 declare var google:any;
 
 @Component({
@@ -24,7 +25,8 @@ export class UbicacionPage  {
   @ViewChild('map',{read: ElementRef, static: false}) mapRef:ElementRef;
 
   constructor(private geolocation: Geolocation, 
-    private ubicacionSrv:UbicacionService, private autoSrv:AutorizaService) {}
+    private ubicacionSrv:UbicacionService, private autoSrv:AutorizaService,
+    private monitorSrv:MonitoreoService) {}
 
  private ubicacionActual:Ubicacion=null;
   
@@ -38,6 +40,56 @@ export class UbicacionPage  {
     this.loadMap();
     //Obtener lecturas de GPS
     this.obtenerLecturasGPS();
+    this.monitorSrv.leerUbicaciones().subscribe(resp=>{
+
+      //this.limpiaMarcadores();
+      let marcador;
+      resp.forEach(ubicacion=>{
+
+        marcador=new google.maps.Marker({
+
+          position:new google.maps.LatLng(ubicacion.latitud,ubicacion.longitud),
+          draggable:false,
+          label: {
+            fontSize: "8pt",
+            text: ubicacion.usuario
+        },
+          map: this.map,
+          
+        icon: {         url: "../assets/icon/pin.png",
+                  scaledSize: new google.maps.Size(30, 30)    
+            } 
+          /*icon: {
+            size: new google.maps.Size(48, 59),
+            anchor: new google.maps.Point(24, 59),
+            url: '../assets/icon/pin.png',
+            text: {
+              content: '!',
+              color: '#fff',
+              size: '24px',
+              weight: '700',
+              position: [25, 24]
+            }
+          }*/
+        });
+        console.log("Antes de Pushhhhhh");
+        marcador.addListener('click',function(){
+
+          const infoWindow = new google.maps.InfoWindow();
+          infoWindow.close();
+          infoWindow.setContent(marcador.getTitle());
+          infoWindow.open(marcador.getMap(), marcador);
+
+        });
+       this.markers.push(marcador);
+        
+      });
+      if(marcador){
+        this.map.setCenter(marcador.getPosition());
+        this.map.setZoom(10);
+      }
+
+    });
     
   }
   
@@ -138,24 +190,7 @@ export class UbicacionPage  {
                          
             
           }));
-          //Guardando posicion en BD
-          /*this.ubicacionActual={
-            latitud: (data as Geoposition).coords.latitude,
-            longitud: (data as Geoposition).coords.longitude,
-            fechaHora: new Date(),
-            usuario: this.autoSrv.obtenerNombreUsuarioLogueado().userId,
-            identificador:''
-          
-          }
-          this.ubicacionSrv.guardarDatos(this.ubicacionActual);
-          */
-     /* this.addMarker({
-        position: {
-          lat: (data as Geoposition).coords.latitude,
-          lng:(data as Geoposition).coords.longitude
-        },
-        title: 'Yo soy este'
-      });*/
+         
         }
 
         
@@ -163,12 +198,7 @@ export class UbicacionPage  {
       
       
      });
-   /* this.markers.forEach(marker=>{
-    
-      
-      this.addMarker(marker);
-      
-    });*/
+  
     
   }
 //agregar marcador
