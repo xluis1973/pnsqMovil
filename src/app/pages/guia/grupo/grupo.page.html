@@ -10,7 +10,7 @@
                         <ion-item>
                             <ion-label >Fecha de Creación</ion-label>
                             <ion-input name="fechaCreacion"
-                            required [(ngModel)]="grupo.fecjaCreacion"                   
+                            required [(ngModel)]="grupo.fechaCreacion"                   
                                                    type="date"
                                                    ></ion-input>
 
@@ -21,6 +21,17 @@
                             required [(ngModel)]="grupo.recorrido"
                                     type="text"
                                      ></ion-input>
+                        </ion-item>
+                        <ion-item>
+                            <ion-select placeholder="Elija Sendero" 
+                                (ionChange)="triggerEvent($event)"
+                                [(ngModel)]="grupo.recorrido">
+                                <ion-select-option value="flora">Flora</ion-select-option>
+                                <ion-select-option value="mirador">Mirador del Potrero</ion-select-option>
+                                <ion-select-option value="guanacos">Guanacos</ion-select-option>
+                                <ion-select-option value="huellas">Huellas del Pasado</ion-select-option>
+                                <ion-select-option value="farallones">Farallones</ion-select-option>
+                              </ion-select>
                         </ion-item>
                         
                     </ion-list>

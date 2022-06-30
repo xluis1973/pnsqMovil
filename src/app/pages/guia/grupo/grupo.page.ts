@@ -18,7 +18,7 @@ export class GrupoPage {
   grupo:Grupo={
     identificador:this.autSrv.obtenerNombreUsuarioLogueado().identificador,
     fechaCreacion:new Date(),
-    recorrido:"",
+    recorrido:"farallones",
     guiaResponsable:this.autSrv.obtenerNombreUsuarioLogueado().identificador,
     visitantes:[],
     activo:true}
@@ -92,5 +92,9 @@ export class GrupoPage {
       console.log("Grupo Desarmado",resp);
     });
 
+  }
+  triggerEvent(evento){
+    console.log("Hizo clic "+evento.target.value);
+    this.grupo.recorrido=evento.target.value;
   }
 }
