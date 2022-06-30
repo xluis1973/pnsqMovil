@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { GruposService } from '../../../services/grupos.service';
 import { Usuario, Grupo } from '../../../interfaces/interfaces';
 import { AutorizaService } from '../../../services/autoriza.service';
+import { AlertController } from '@ionic/angular';
 
 
 @Component({
@@ -12,7 +13,8 @@ import { AutorizaService } from '../../../services/autoriza.service';
 export class GrupoPage {
 
   
-  constructor(private grupoSrv:GruposService, private autSrv:AutorizaService ) { }
+  constructor(private grupoSrv:GruposService, private autSrv:AutorizaService,
+    private alertController: AlertController ) { }
 
   listaUsuarios:Usuario[]=[];
   grupo:Grupo={
@@ -29,7 +31,19 @@ export class GrupoPage {
     grupoGuardado:boolean=false;
     
 
-  async ionViewWillEnter() {
+   ionViewWillEnter() {
+        this.lecturaInicial();
+   
+  }
+
+  async lecturaInicial(){
+    this.grupo={
+      identificador:this.autSrv.obtenerNombreUsuarioLogueado().identificador,
+      fechaCreacion:new Date(),
+      recorrido:"farallones",
+      guiaResponsable:this.autSrv.obtenerNombreUsuarioLogueado().identificador,
+      visitantes:[],
+      activo:true}
     this.grupo=await this.grupoSrv.grupoActivo(this.grupo);
     //Paso el id del guía responsable.
     //await this.grupoSrv.activosDeEsteGrupo("2222");
@@ -42,7 +56,6 @@ export class GrupoPage {
     this.listaUsuarios.splice(0, this.listaUsuarios.length);
     this.listaUsuarios= await this.grupoSrv.obtenerVisitantes(this.autSrv.obtenerNombreUsuarioLogueado().identificador,this.desarmarGrupoV);
     this.listaUsuarios.forEach(elem=>{if(elem.ciudad!='success'){elem.ciudad='primary';}});
-   
   }
   marcarUsuariosDeEsteGrupo() {
     this.listaUsuarios.forEach(elem=>{elem.ciudad='success';});
@@ -83,18 +96,72 @@ export class GrupoPage {
     }
     ).catch((err)=>{console.log(err)}  );
 }
-  desarmarGrupo(){
+  desarmarGrupoTerminaRecorrido(){
     this.desarmarGrupoV=false;
-    this.crearGrupoV=true;
+    this.crearGrupoV=false;
     this.grupoGuardado=false;
-    this.grupo.visitantes=[];
+    
     this.grupoSrv.desarmarGrupo(this.grupo).then((resp)=>{
-      console.log("Grupo Desarmado",resp);
+      console.log("Terminó el recorrido",resp);
+      this.lecturaInicial();
     });
 
   }
   triggerEvent(evento){
     console.log("Hizo clic "+evento.target.value);
     this.grupo.recorrido=evento.target.value;
+  }
+
+  async desarmarGrupo(){
+ 
+      const alert = await this.alertController.create({
+        cssClass: 'my-custom-class',
+        header: 'Elija una opción',
+        subHeader: 'Subtitle',
+        message: 'Usted puede.',
+        buttons: [ {
+          text: 'Cancelar',
+          role: 'cancel',
+          handler: (blah) => {
+            console.log('Confirm Cancel: blah');
+          }
+        },
+        {
+          text: 'Deshacer Grupo',
+          role: 'deshacer',
+          handler: (blah) => {
+            console.log('Deshace grupo: blah');
+            this.desarmarGrupoV=false;
+            this.crearGrupoV=false;
+            this.grupoGuardado=false;
+            this.grupo.visitantes=[];
+            this.grupoSrv.desarmarGrupoEliminar(this.grupo).then(resp=>{
+
+              console.log("Grupo Elimindo");
+              this.lecturaInicial();
+
+            });
+            
+            
+          }
+        }
+        ,
+        {
+          text: 'Terminar Recorrido',
+          role: 'terminar',
+          handler: (blah) => {
+            this.desarmarGrupoTerminaRecorrido();
+            console.log('Terminó Recorrido');
+          }
+        }
+
+      
+      
+      ]
+      });
+  
+      await alert.present();
+    
+
   }
 }

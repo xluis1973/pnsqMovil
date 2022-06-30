@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { initializeApp } from 'firebase/app';
 import { firebaseConfig } from 'src/environments/environment.prod';
-import { getFirestore, collection,setDoc,doc, query, where, getDoc, addDoc, getDocs } from 'firebase/firestore';
+import { getFirestore, collection,setDoc,doc, query, where, getDoc, addDoc, getDocs, deleteDoc } from 'firebase/firestore';
 import { Grupo, Visitante, Usuario } from '../interfaces/interfaces';
 
 import { getAuth } from 'firebase/auth';
 import { registerLocaleData } from '@angular/common';
+
 
 
 const app = initializeApp(firebaseConfig);
@@ -193,9 +194,22 @@ export class GruposService {
    
     const grupoCol=doc(db,"grupo",identificador);
     grupo.activo=false
+    
     //const qGrupos=query(grupoCol,where("activo","==",true),where("guiaResponsable","==",grupo.guiaResponsable));
     await setDoc(grupoCol,grupo).catch(error=>console.log("Error al desarmar Grupo",error));
 
+
+   }
+
+   async desarmarGrupoEliminar(grupo:Grupo){
+    const grupoCole=collection(db,"grupo");
+    const qGrupos=query(grupoCole,where("activo","==",true),where("guiaResponsable","==",grupo.guiaResponsable));
+    const grupoSnapshot= await getDocs(qGrupos);
+     grupoSnapshot.forEach(doc=>{
+       deleteDoc(doc.ref);
+    
+    
+    });
 
    }
 
