@@ -178,8 +178,12 @@ export class GruposService {
     const qGrupos=query(grupoCole,where("activo","==",true),where("guiaResponsable","==",grupo.guiaResponsable));
     const grupoSnapshot= await getDocs(qGrupos);
     if(grupoSnapshot.docs.length>0){
-    let identificador=grupoSnapshot.docs[0].data() as Grupo;
-    return identificador;
+
+    let identificador=grupoSnapshot.docs[0].data();
+
+    
+     identificador.fechaCreacion=identificador.fechaCreacion.toDate();
+     return identificador as Grupo;
     }else return grupo;
 
     }

@@ -17,6 +17,7 @@ export class GrupoPage {
     private alertController: AlertController ) { }
 
   listaUsuarios:Usuario[]=[];
+  fecha:String;
   grupo:Grupo={
     identificador:this.autSrv.obtenerNombreUsuarioLogueado().identificador,
     fechaCreacion:new Date(),
@@ -33,6 +34,7 @@ export class GrupoPage {
 
    ionViewWillEnter() {
         this.lecturaInicial();
+        
    
   }
 
@@ -44,7 +46,11 @@ export class GrupoPage {
       guiaResponsable:this.autSrv.obtenerNombreUsuarioLogueado().identificador,
       visitantes:[],
       activo:true}
+      
     this.grupo=await this.grupoSrv.grupoActivo(this.grupo);
+    this.fecha=this.grupo.fechaCreacion.getDate()+"/"+this.grupo.fechaCreacion.getUTCMonth()+"/"+this.grupo.fechaCreacion.getFullYear();
+  
+   
     //Paso el id del guía responsable.
     //await this.grupoSrv.activosDeEsteGrupo("2222");
     if(this.grupo.visitantes.length>0){
