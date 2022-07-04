@@ -95,6 +95,7 @@ private _storage:Storage |null=null;
   
     });
 if(visitante){
+  visitante.ultimoIngreso=new Date();
 
   const visitanteCol=doc(db, "visitante", visitante.identificador );
   await setDoc(visitanteCol, visitante).catch((error)=>{

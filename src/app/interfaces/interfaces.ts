@@ -35,7 +35,8 @@ export interface Visitante{
     identificador:string,
     usuario:string,
     pais:string,
-    provincia:string
+    provincia:string,
+    ultimoIngreso?:Date
 }
 
 export interface Ubicacion{
