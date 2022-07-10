@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { GruposService } from '../../../services/grupos.service';
-import { Usuario, Grupo } from '../../../interfaces/interfaces';
+import { Usuario, Grupo, Visitante } from '../../../interfaces/interfaces';
 import { AutorizaService } from '../../../services/autoriza.service';
 import { AlertController } from '@ionic/angular';
 
@@ -16,6 +16,7 @@ export class GrupoPage {
   constructor(private grupoSrv:GruposService, private autSrv:AutorizaService,
     private alertController: AlertController ) { }
 
+    public static visitantesActivos:string[]=[""];
   listaUsuarios:Usuario[]=[];
   fecha:String;
   grupo:Grupo={
@@ -48,7 +49,7 @@ export class GrupoPage {
       activo:true}
       
     this.grupo=await this.grupoSrv.grupoActivo(this.grupo);
-    this.fecha=this.grupo.fechaCreacion.getDate()+"/"+this.grupo.fechaCreacion.getUTCMonth()+"/"+this.grupo.fechaCreacion.getFullYear();
+    this.fecha=this.grupo.fechaCreacion.getDate()+"/"+this.grupo.fechaCreacion.getUTCMonth()+1+"/"+this.grupo.fechaCreacion.getFullYear();
   
    
     //Paso el id del guía responsable.
@@ -57,6 +58,7 @@ export class GrupoPage {
       this.desarmarGrupoV=true;
       this.crearGrupoV=false;
       this.grupoGuardado=true;
+      GrupoPage.visitantesActivos=this.grupo.visitantes;
       this.marcarUsuariosDeEsteGrupo();
     }
     this.listaUsuarios.splice(0, this.listaUsuarios.length);
@@ -101,6 +103,7 @@ export class GrupoPage {
       console.log("Grupo Guardado",resp);
     }
     ).catch((err)=>{console.log(err)}  );
+    GrupoPage.visitantesActivos=this.grupo.visitantes;
 }
   desarmarGrupoTerminaRecorrido(){
     this.desarmarGrupoV=false;
@@ -141,6 +144,7 @@ export class GrupoPage {
             this.crearGrupoV=false;
             this.grupoGuardado=false;
             this.grupo.visitantes=[];
+            GrupoPage.visitantesActivos=[""];
             this.grupoSrv.desarmarGrupoEliminar(this.grupo).then(resp=>{
 
               console.log("Grupo Elimindo");
@@ -156,6 +160,7 @@ export class GrupoPage {
           text: 'Terminar Recorrido',
           role: 'terminar',
           handler: (blah) => {
+            GrupoPage.visitantesActivos=[""];
             this.desarmarGrupoTerminaRecorrido();
             console.log('Terminó Recorrido');
           }
