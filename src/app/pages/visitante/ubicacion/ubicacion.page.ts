@@ -6,6 +6,7 @@ import {filter} from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 import { UbicacionService } from 'src/app/services/ubicacion.service';
 import { AutorizaService } from 'src/app/services/autoriza.service';
+import { Usuario } from '../../../interfaces/interfaces';
 declare var google:any;
 
 @Component({
@@ -27,10 +28,12 @@ export class UbicacionPage  {
     private ubicacionSrv:UbicacionService, private autoSrv:AutorizaService) {}
 
  private ubicacionActual:Ubicacion=null;
+ private usuarioActual:Usuario;
   
 
   ionViewDidEnter(){
 
+    this.usuarioActual=this.autoSrv.obtenerNombreUsuarioLogueado();
     //Obtiene mi posición actual
     this.posicionActual();
     //Recreo el mapa
@@ -89,7 +92,7 @@ export class UbicacionPage  {
    
     //Subscripción a lecturas de GPS
     this.watch = this.geolocation.watchPosition({
-      maximumAge: 3000,
+      maximumAge: 5000,
       enableHighAccuracy: true
     })
     
@@ -114,6 +117,15 @@ export class UbicacionPage  {
           );
           this.lectura=true;
           console.log("Salida ");
+          this.ubicacionActual={
+            latitud: (data as Geoposition).coords.latitude,
+            longitud: (data as Geoposition).coords.longitude,
+            fechaHora: new Date(),
+            usuario: this.usuarioActual.identificador,
+            identificador:this.usuarioActual.nombre,
+          
+          }
+          this.ubicacionSrv.guardarDatos(this.ubicacionActual);
       }else{
         
         let diferenciaLatitud=Math.abs(this.lastPosition.coords.latitude-(data as Geoposition).coords.latitude);
@@ -142,8 +154,8 @@ export class UbicacionPage  {
             latitud: (data as Geoposition).coords.latitude,
             longitud: (data as Geoposition).coords.longitude,
             fechaHora: new Date(),
-            usuario: this.autoSrv.obtenerNombreUsuarioLogueado().identificador,
-            identificador:''
+            usuario: this.usuarioActual.identificador,
+            identificador:this.usuarioActual.nombre,
           
           }
           this.ubicacionSrv.guardarDatos(this.ubicacionActual);
