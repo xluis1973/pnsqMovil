@@ -11,6 +11,8 @@ import { getFirestore, getDocs, collection,setDoc,doc, query, where } from 'fire
 import { Usuario, Visitante, Guia } from '../interfaces/interfaces';
 import { Storage } from '@ionic/storage-angular';
 import { getAuth, GoogleAuthProvider, SignInMethod, signInWithCredential, signOut } from 'firebase/auth';
+import { UbicacionService } from './ubicacion.service';
+import { UbicacionPage } from '../pages/visitante/ubicacion/ubicacion.page';
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth();
@@ -23,7 +25,7 @@ export class AutorizaService {
 private usuario:Usuario;
 private _storage:Storage |null=null;
   constructor(private gp:GooglePlus, private AFAuth:AngularFireAuth,
-    private toastCtrl:ToastController,private storage:Storage) {
+    private toastCtrl:ToastController,private storage:Storage, private ubiSrv:UbicacionService) {
       this.init();
      }
 
@@ -198,7 +200,9 @@ obtenerNombreUsuarioLogueado():Usuario{
 
  cerrarSesion(){
   this.usuario.activo=false;
-   this.guardarDatos(this.usuario);
+  UbicacionPage.ultimaLectura.identificador="..";
+     this.guardarDatos(this.usuario);
+     this.ubiSrv.guardarDatos(UbicacionPage.ultimaLectura);
   return this.gp.logout();
 }
 
