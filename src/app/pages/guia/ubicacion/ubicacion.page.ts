@@ -31,7 +31,7 @@ export class UbicacionPage  {
 
  private ubicacionActual:Ubicacion=null;
  private usuarioActual:Usuario;
-  
+ public static ultimaLectura:Ubicacion=null;  
 
   ionViewDidEnter(){
 
@@ -180,6 +180,7 @@ export class UbicacionPage  {
             identificador:this.usuarioActual.nombre,
           
           }
+          UbicacionPage.ultimaLectura=this.ubicacionActual;
           this.ubicacionSrv.guardarDatos(this.ubicacionActual);
       }else{
         
@@ -212,6 +213,7 @@ export class UbicacionPage  {
             identificador:this.usuarioActual.nombre,
           
           }
+          UbicacionPage.ultimaLectura=this.ubicacionActual;
           this.ubicacionSrv.guardarDatos(this.ubicacionActual);
          
         }

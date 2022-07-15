@@ -5,7 +5,7 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { getAuth  } from "firebase/auth";
 import { initializeApp } from 'firebase/app';
 import { firebaseConfig } from 'src/environments/environment.prod';
-import { getFirestore, getDocs, collection,setDoc,doc, query, where, orderBy } from 'firebase/firestore';
+import { getFirestore, getDocs, collection,setDoc,doc, query, where, orderBy,Timestamp } from 'firebase/firestore';
 import { Publicacion } from '../interfaces/interfaces';
 import { INotificationPayload } from 'cordova-plugin-fcm-with-dependecy-updated/typings/INotificationPayload';
 
@@ -58,8 +58,9 @@ export class PublicarService {
    async obtenerPublicaciones():Promise<Publicacion[]>{
     this.publicaciones=[];
     const publicacionCol = collection(db, 'publicacion');
-
-    const q = query(publicacionCol,orderBy("fechaCreacion","desc"));
+    const ff=Timestamp.now();
+    console.log("Fecha actual en publi",ff);
+    const q = query(publicacionCol,where("fechaVto",">=",ff),orderBy("fechaVto","desc"));
     const publicacionSnapshot = await getDocs(q);
     
     const publicacionList = publicacionSnapshot.docs.map(doc => doc.data());

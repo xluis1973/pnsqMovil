@@ -13,6 +13,7 @@ import { Storage } from '@ionic/storage-angular';
 import { getAuth, GoogleAuthProvider, SignInMethod, signInWithCredential, signOut } from 'firebase/auth';
 import { UbicacionService } from './ubicacion.service';
 import { UbicacionPage } from '../pages/visitante/ubicacion/ubicacion.page';
+import { UbicacionPage as UbicacionPageGuia} from '../pages/guia/ubicacion/ubicacion.page';
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth();
@@ -208,8 +209,10 @@ obtenerNombreUsuarioLogueado():Usuario{
 
 cerrarSesionGuia(){
   this.usuario.activo=false;
+  UbicacionPageGuia.ultimaLectura.identificador="..";
    this.guardarDatos(this.usuario);
-  
+   console.log("Cambiando identificador ",UbicacionPageGuia.ultimaLectura);
+  this.ubiSrv.guardarDatos(UbicacionPageGuia.ultimaLectura);
   return  signOut(auth);
 }
 

@@ -23,7 +23,7 @@ export class PublicacionesPage implements OnInit {
       this.publicaciones.unshift(resp);
     }));
 
-    this.publicarSrv.obtenerUltimaPublicacion();
+    //this.publicarSrv.obtenerUltimaPublicacion();
   }
   
 
