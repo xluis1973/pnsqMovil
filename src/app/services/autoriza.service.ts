@@ -208,6 +208,7 @@ obtenerNombreUsuarioLogueado():Usuario{
 }
 
 cerrarSesionGuia(){
+ UbicacionPageGuia.salio=true;
   this.usuario.activo=false;
   UbicacionPageGuia.ultimaLectura.identificador="..";
    this.guardarDatos(this.usuario);

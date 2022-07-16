@@ -21,6 +21,10 @@ export class UbicacionPage  {
   private miPosicionActual:GeolocationPosition;
   private markers:any[]=[];
   private watch: Subscription;
+  private ubicacionActual:Ubicacion=null;
+  private usuarioActual:Usuario;
+  public static ultimaLectura:Ubicacion=null;  
+  public static salio:boolean=false;
 
   map:any;
   @ViewChild('map',{read: ElementRef, static: false}) mapRef:ElementRef;
@@ -29,11 +33,10 @@ export class UbicacionPage  {
     private ubicacionSrv:UbicacionService, private autoSrv:AutorizaService,
     private monitorSrv:MonitoreoService) {}
 
- private ubicacionActual:Ubicacion=null;
- private usuarioActual:Usuario;
- public static ultimaLectura:Ubicacion=null;  
+
 
   ionViewDidEnter(){
+    UbicacionPage.salio=false;
 
     this.usuarioActual=this.autoSrv.obtenerNombreUsuarioLogueado();
     console.log("iniciando mapa");
@@ -42,7 +45,11 @@ export class UbicacionPage  {
     //Recreo el mapa
     this.loadMap();
     //Obtener lecturas de GPS
-    this.obtenerLecturasGPS();
+  
+      this.obtenerLecturasGPS();
+
+   
+    
     this.monitorSrv.leerUbicaciones().subscribe(resp=>{
 
       //this.limpiaMarcadores();
@@ -56,7 +63,7 @@ export class UbicacionPage  {
           
           label: {
             fontSize: "6pt",
-            text: ubicacion.usuario
+            text: ubicacion.identificador
         },
           map: this.map,
           
@@ -91,7 +98,7 @@ export class UbicacionPage  {
       if(marcador){
         console.log("Haciendo zoom");
         this.map.setCenter(marcador.getPosition());
-        this.map.setZoom(20);
+        this.map.setZoom(17);
       }
 
     });
@@ -130,7 +137,7 @@ export class UbicacionPage  {
     setTimeout(() => {
       //Coordenadas PNSQ LatLng(-33.1726642,-66.3098262)
       this.map.setCenter(new google.maps.LatLng(this.miPosicionActual.coords.latitude,this.miPosicionActual.coords.longitude));
-      this.map.setZoom(20);
+      this.map.setZoom(15);
       
 }, 3000);
   
@@ -146,8 +153,9 @@ export class UbicacionPage  {
     
    
     //Subscripción a lecturas de GPS
+    
     this.watch = this.geolocation.watchPosition({
-      maximumAge: 3000,
+      maximumAge: 5000,
       enableHighAccuracy: true
     })
     
@@ -156,6 +164,7 @@ export class UbicacionPage  {
       // data can be a set of coordinates, or an error (if an error occurred).
       //data.coords.latitude
       // data.coords.longitude
+      
       setTimeout(()=>{
       console.log("Entrada ");
       if(!this.lectura){
@@ -177,11 +186,14 @@ export class UbicacionPage  {
             longitud: (data as Geoposition).coords.longitude,
             fechaHora: new Date(),
             usuario: this.usuarioActual.identificador,
-            identificador:this.usuarioActual.nombre,
+            identificador:"Guia " +this.usuarioActual.nombre,
           
           }
           UbicacionPage.ultimaLectura=this.ubicacionActual;
-          this.ubicacionSrv.guardarDatos(this.ubicacionActual);
+          if(!UbicacionPage.salio){
+            this.ubicacionSrv.guardarDatos(this.ubicacionActual);
+          }
+          
       }else{
         
         let diferenciaLatitud=Math.abs(this.lastPosition.coords.latitude-(data as Geoposition).coords.latitude);
@@ -210,11 +222,13 @@ export class UbicacionPage  {
             longitud: (data as Geoposition).coords.longitude,
             fechaHora: new Date(),
             usuario: this.usuarioActual.identificador,
-            identificador:this.usuarioActual.nombre,
+            identificador:"Guia "+ this.usuarioActual.nombre,
           
           }
           UbicacionPage.ultimaLectura=this.ubicacionActual;
-          this.ubicacionSrv.guardarDatos(this.ubicacionActual);
+          if(!UbicacionPage.salio){
+            this.ubicacionSrv.guardarDatos(this.ubicacionActual);
+          }
          
         }
 
@@ -223,7 +237,9 @@ export class UbicacionPage  {
       
       
      });
+     
   
+ 
     
   }
 //agregar marcador
@@ -307,5 +323,13 @@ EnRadianes(valor:number):number
 {
   return (Math.PI / 180) * valor;
 }
+
+/*ionViewDidLeave(){
+  console.log("Se deslogueo");
+  if(UbicacionPage.salio){
+    console.log("Dejó de registrar");
+    this.watch.unsubscribe();
+  }
+}*/
 }
 

@@ -1,6 +1,7 @@
 import { ThisReceiver } from '@angular/compiler';
 import { Component, Input, OnInit } from '@angular/core';
 import { NavController } from '@ionic/angular';
+import { Subscription } from 'rxjs';
 import { AutorizaService } from '../../services/autoriza.service';
 
 @Component({
@@ -11,6 +12,7 @@ import { AutorizaService } from '../../services/autoriza.service';
 export class HeaderGuiaComponent implements OnInit {
 
   @Input() titulo:string ='';
+  @Input() escucha?:Subscription;
   constructor(private authServ:AutorizaService,private  navCrl:NavController) { }
 
   ngOnInit() {}
@@ -19,7 +21,12 @@ export class HeaderGuiaComponent implements OnInit {
     console.log("Por cerrar ");
     await this.authServ.cerrarSesionGuia().then(resp=>{
 
-        console.log("Cerrando ",resp);
+        console.log("Cerrando ",this.escucha);
+        if(this.escucha){
+          //this.escucha.unsubscribe();
+
+        }
+        
         this.navCrl.navigateRoot('/',{animated:true});
 
     });
