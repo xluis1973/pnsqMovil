@@ -284,9 +284,13 @@ export class UbicacionPage  {
     }
 
     limpiaMarcadores() {
-      this.markers.forEach((marca)=>{
+      /*this.markers.forEach((marca)=>{
         marca.setMap(null);
          marca=null;});
+      this.markers=[];*/
+      for(let a in this.markers){
+        this.markers[a].setMap(null);
+      }
       this.markers=[];
     }
     
